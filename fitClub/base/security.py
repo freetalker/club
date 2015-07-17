@@ -16,7 +16,11 @@ def desEncrypt(data):
     return base64.b64encode(EncryptStr) #转base64编码返回
 
 def desDecrypt(data):
-    src = base64.decodestring(data)
+    try: #base64解码 失败则不解码
+        src = base64.decodestring(data)
+    except:
+        return ''
+
     return k.decrypt(src)
 
 def md5(str):

@@ -14,7 +14,7 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 import os
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
+HERE = os.path.dirname(os.path.abspath(__file__))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
@@ -25,7 +25,17 @@ SECRET_KEY = '^^_-&(@ay9$4_0)98*h$+omn_c4rmsx^eu^ra#69hak$nl+g@6'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+#TEMPLATE_DEBUG = False
+
+#ADMINS = (
+#    ('John Ly', 'lyjohn@163.com'),
+#)
+
+ALLOWED_HOSTS = [
+    '101.200.73.94',
+    '127.0.0.1',
+    'localhost',
+]
 
 
 # Application definition
@@ -86,15 +96,16 @@ DATABASES = {
     'default':{
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'fitClub.sqlite3'),
+    },
+    'test': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'fitclub',
+        'USER': 'fitclub',
+        'PASSWORD': 'abcd-1234',
+        'HOST': '101.200.73.94',
+        'PORT': '3306',
+        'TIME_ZONE': 'Asia/Shanghai'
     }
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.mysql',
-    #     'NAME': 'fitClub',
-    #     'USER': 'fitClub',
-    #     'PASSWORD': 'abcd-1234',
-    #     'HOST': '',
-    #     'PORT': '',
-    # }
 }
 
 
@@ -118,4 +129,25 @@ DEFAULT_CHARSET = 'utf-8'
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
+
+MEDIA_ROOT = os.path.join(HERE, 'data').replace('\\','/')
+
+STATIC_ROOT = os.path.join(HERE, 'static').replace('\\','/')
+
+MEDIA_URL = '/media/'
+
 STATIC_URL = '/static/'
+
+ADMIN_MEDIA_PREFIX = '/static/admin/'
+
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+#   'django.contrib.staticfiles.finders.DefaultStorageFinder',
+)
+
+#UPLOAD SETTINGS
+FILE_UPLOAD_TEMP_DIR = os.path.join(HERE, 'data/upload/').replace('\\', '/')
+FILE_UPLOAD_HANDLERS = ("django.core.files.uploadhandler.MemoryFileUploadHandler",
+ "django.core.files.uploadhandler.TemporaryFileUploadHandler",)
+DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'

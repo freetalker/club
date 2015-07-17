@@ -21,13 +21,10 @@ from fitHealth import views
 admin.autodiscover()
 
 router = routers.DefaultRouter()
-router.register(r'users', views.UserViewSet)
-router.register(r'members', views.MemberViewSet)
-
 
 urlpatterns = [
     url(r'^', include(router.urls)),
     url(r'^', include('fitApi.urls')),
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework'))
+#    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework'))
 ]
