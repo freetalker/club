@@ -46,7 +46,7 @@ order_status_choices = (
 
 class User(models.Model):
     loginname = models.CharField(max_length=20, unique=True, null=False)
-    password = models.CharField(max_length=20, null=False)
+    password = models.CharField(max_length=32, null=False)
     nickname = models.CharField(max_length=20, null=True)
     realname = models.CharField(max_length=20)
     sex = models.IntegerField(choices=sex_choices)
@@ -70,7 +70,7 @@ class User(models.Model):
         return self.loginname
 
     def save(self, *args, **kwargs): #默认的，给后台admin用的
-        self.password = hashlib.sha1(self.password).hexdigest()
+        self.password = hashlib.md5(self.password).hexdigest()
         super(User, self).save(*args, **kwargs)
 
     def login(self,*args, **kwargs): #平时就用这个，密码不修改

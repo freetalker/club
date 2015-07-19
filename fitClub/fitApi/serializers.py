@@ -7,5 +7,5 @@ from fitHealth.models import User
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('id','loginname','password','nickname','realname')
+        fields = ('id','loginname','nickname','realname')
 

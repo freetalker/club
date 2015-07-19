@@ -17,14 +17,22 @@ from django.conf.urls import include, url
 from django.contrib import admin
 from rest_framework import routers
 from fitHealth import views
-
+from views import *
 admin.autodiscover()
 
-router = routers.DefaultRouter()
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+# This will work if DEBUG is True
 
 urlpatterns = [
-    url(r'^', include(router.urls)),
     url(r'^', include('fitApi.urls')),
+    url(r'^misfit$',misfit),
+    url(r'^misfit/auth',misfit_authrize),
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^hello/$', hello),
+    url(r'^$', home),
 #    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework'))
+
+
 ]
+
+urlpatterns += staticfiles_urlpatterns()
