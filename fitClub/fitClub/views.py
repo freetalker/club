@@ -20,11 +20,13 @@ def home(req):
 
     return render_to_response("fitHealth/index.html",{'t':t,'current_title':now})
 
+auth = MisfitAuth(misfit_app_key,misfit_app_secret,redirect_uri = 'http://127.0.0.1:8000/misfit/auth')
+print auth
 def misfit(req):
     if req.method == 'GET':
-        return render_to_response('fitClub/index.html',{'t':"dddd",'current_title':'now'})
+        now = datetime.datetime.now()
+        return render_to_response('fitClub/index.html',{'t':r'绑定Misfit','current_title':now})
     else:
-        auth = MisfitAuth(misfit_app_key,misfit_app_secret,redirect_uri = 'http://fitclub.lyjohn.com/misfit/auth')
         auth_url = auth.authorize_url()
 
         response_data = {}
@@ -33,7 +35,6 @@ def misfit(req):
 
 def misfit_authrize(req):
     if req.method == 'GET':
-        auth = MisfitAuth(misfit_app_key,misfit_app_secret,redirect_uri = 'http://fitclub.lyjohn.com/misfit/auth')
         try:
             code = req.GET['code']
         except KeyError:
@@ -45,10 +46,12 @@ def misfit_authrize(req):
             return  HttpResponse('state 必须有')
 
         access_token = auth.fetch_token(code, state)
-        print  access_token
-
-        misfit = Misfit(misfit_app_key, misfit_app_secret, access_token)
-        print misfit.profile()
+        print access_token
+        # misfit = Misfit(misfit_app_key, misfit_app_secret, access_token)
+        # print misfit.profile()
+        # print misfit.device()
+        # print misfit.goal()
+        # print misfit.summary()
 
         return HttpResponse('Ok')
     else:
