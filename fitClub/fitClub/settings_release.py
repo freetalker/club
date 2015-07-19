@@ -13,5 +13,18 @@ ADMINS = (
     ('John Ly', 'lyjohn@163.com'),
 )
 
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'fitclub',
+        'USER': 'fitclub',
+        'PASSWORD': 'abcd-1234',
+        'HOST': '101.200.73.94',
+        'PORT': '3306',
+        'TIME_ZONE': 'Asia/Shanghai'
+    }
+}
+
 SEND_BROKEN_LINK_EMAILS = True
 MANAGERS = ADMINS
