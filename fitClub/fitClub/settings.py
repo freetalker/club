@@ -25,11 +25,11 @@ SECRET_KEY = '^^_-&(@ay9$4_0)98*h$+omn_c4rmsx^eu^ra#69hak$nl+g@6'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-#TEMPLATE_DEBUG = False
+# TEMPLATE_DEBUG = False
 
-#ADMINS = (
+# ADMINS = (
 #    ('John Ly', 'lyjohn@163.com'),
-#)
+# )
 
 ALLOWED_HOSTS = [
     '101.200.73.94',
@@ -52,15 +52,14 @@ INSTALLED_APPS = (
     'fitApi',
 )
 
-
 REST_FRAMEWORK = {
-#    'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAdminUser',),
+    #    'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAdminUser',),
 }
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    #'django.middleware.csrf.CsrfViewMiddleware',
+    # 'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -74,7 +73,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            os.path.join(HERE, '../templates/').replace('\\','/'),
+            os.path.join(HERE, '../templates/').replace('\\', '/'),
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -95,7 +94,7 @@ WSGI_APPLICATION = 'fitClub.wsgi.application'
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
 
 DATABASES = {
-    'default':{
+    'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'fitClub.sqlite3'),
     },
@@ -132,9 +131,9 @@ DEFAULT_CHARSET = 'utf-8'
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
 
-MEDIA_ROOT = os.path.join(HERE, 'data').replace('\\','/')
+MEDIA_ROOT = os.path.join(HERE, 'data').replace('\\', '/')
 
-STATIC_ROOT = os.path.join(HERE, 'static').replace('\\','/')
+STATIC_ROOT = os.path.join(HERE, 'static').replace('\\', '/')
 
 MEDIA_URL = '/media/'
 
@@ -152,8 +151,46 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
 
-#UPLOAD SETTINGS
+# UPLOAD SETTINGS
 FILE_UPLOAD_TEMP_DIR = os.path.join(HERE, 'data/upload/').replace('\\', '/')
 FILE_UPLOAD_HANDLERS = ("django.core.files.uploadhandler.MemoryFileUploadHandler",
- "django.core.files.uploadhandler.TemporaryFileUploadHandler",)
+                        "django.core.files.uploadhandler.TemporaryFileUploadHandler",)
 DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
+
+# more details on how to customize your logging configuration.
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': True,
+    'formatters': {
+        'standard': {
+            'format': '%(levelname)s %(asctime)s %(message)s'
+        },
+    },
+    'filters': {
+    },
+    'handlers': {
+        'mail_admins': {
+            'level': 'ERROR',
+            'class': 'django.utils.log.AdminEmailHandler',
+            'formatter': 'standard',
+        },
+        'misfit_handler': {
+            'level': 'DEBUG',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': 'path1',
+            'formatter': 'standard',
+        },
+    },
+    'loggers': {
+        'django.request': {
+            'handlers': ['mail_admins'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+        'misfit': {
+            'handlers': ['misfit_handler'],
+            'level': 'INFO',
+            'propagate': False
+        },
+    }
+}

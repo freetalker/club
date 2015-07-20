@@ -47,7 +47,7 @@ def misfit_authrize(req):
         except KeyError:
             return  HttpResponse('state 必须有')
 
-        log = logging.getLogger('test1')
+        log = logging.getLogger('misfit')
 
         log.error(r'');
         access_token = auth.fetch_token(code, state)
@@ -66,7 +66,7 @@ def misfit_notification(req):
     if req.method == 'POST':
         notification = MisfitNotification(req.POST)
         if notification.type == 'Notification':
-            log = logging.getLogger('test1')
+            log = logging.getLogger('misfit')
             for message in notification.Message:
                 log.info(message['type'])
                 if message['type'] == 'goals':
@@ -78,10 +78,10 @@ def misfit_notification(req):
                 else:
                     log.info(message['action']+message['updatedAt'])
         elif notification.type == 'SubscriptionConfirmation':
-            log = logging.getLogger('test1')
+            log = logging.getLogger('misfit')
             log.info(notification.type+notification.Message)
         else:
-            log = logging.getLogger('test1')
+            log = logging.getLogger('misfit')
             log.info(r"未做处理")
         return HttpResponse('')
     else: #GET
