@@ -1,12 +1,14 @@
 # coding=utf-8
 import datetime
 import json
+import logging
 from django.forms import forms
 from django.http import HttpResponse
 from django.template import Template, RequestContext
 from django.shortcuts import render_to_response
-from misfit import Misfit
+
 from misfit.auth import MisfitAuth
+from misfit.notification import MisfitNotification
 
 misfit_app_key = 'QaQCAfBPfDvQGQ6w'
 misfit_app_secret = '4K5tcnsUnZiCidTGzJK1DQCJZdyriaDm'
@@ -45,6 +47,9 @@ def misfit_authrize(req):
         except KeyError:
             return  HttpResponse('state 必须有')
 
+        log = logging.getLogger('test1')
+
+        log.error(r'');
         access_token = auth.fetch_token(code, state)
         print access_token
         # misfit = Misfit(misfit_app_key, misfit_app_secret, access_token)
@@ -56,3 +61,28 @@ def misfit_authrize(req):
         return HttpResponse('Ok')
     else:
         return HttpResponse('Post 没用')
+
+def misfit_notification(req):
+    if req.method == 'POST':
+        notification = MisfitNotification(req.POST)
+        if notification.type == 'Notification':
+            log = logging.getLogger('test1')
+            for message in notification.Message:
+                log.info(message['type'])
+                if message['type'] == 'goals':
+                    log.info(message['updatedAt'])
+                elif message['type'] == 'profiles':
+                    log.info(message['action']+message['updatedAt'])
+                elif message['type'] == 'devices':
+                    log.info(message['action']+message['updatedAt'])
+                else:
+                    log.info(message['action']+message['updatedAt'])
+        elif notification.type == 'SubscriptionConfirmation':
+            log = logging.getLogger('test1')
+            log.info(notification.type+notification.Message)
+        else:
+            log = logging.getLogger('test1')
+            log.info(r"未做处理")
+        return HttpResponse('')
+    else: #GET
+        return HttpResponse(r'用作Notification响应')

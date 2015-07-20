@@ -27,6 +27,7 @@ urlpatterns = [
     url(r'^', include('fitApi.urls')),
     url(r'^misfit$',misfit),
     url(r'^misfit/auth',misfit_authrize),
+    url(r'^misfit/notification',misfit_notification),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^hello/$', hello),
     url(r'^$', home),
