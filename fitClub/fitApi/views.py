@@ -1,13 +1,15 @@
 # coding=utf-8
 from datetime import datetime
+from django.views.decorators.csrf import csrf_exempt
 
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+
 from base.security import *
 
-from fitHealth.models import User
-from fitApi.serializers import UserSerializer
+from fitAdmin.models import User
+from fitApi.serializers import UserSerializer, AvatarSerializer
 
 
 @api_view(['GET', 'POST'])
@@ -66,6 +68,9 @@ def user_login(request, format=None):
             except KeyError:
                 login_type = 1  # web
 
+        # if login_type == 1:
+        #     return Response({'status': 0, 'message': '需传输终端字段'})
+
         try:
             loginname = request.DATA['loginname']
         except KeyError:
@@ -84,7 +89,7 @@ def user_login(request, format=None):
             user = users.first()
             # Y9VtcSMp3KQ=  123456
 
-            if login_type != 1: #不是web才加密 web直接登录了
+            if login_type != 1:  # 不是web才加密 web直接登录了
                 password = desDecrypt(password)
             else:
                 password = str(password)
@@ -94,8 +99,6 @@ def user_login(request, format=None):
             elif not user.is_active:
                 return Response({'status': 0, 'message': '用户已锁定'})
             else:
-                token = tokenGenerate({"id": user.id, "name": user.loginname})
-
                 if request.META.has_key('HTTP_X_FORWARDED_FOR'):
                     ip = request.META['HTTP_X_FORWARDED_FOR']
                 else:
@@ -106,4 +109,80 @@ def user_login(request, format=None):
                 user.last_login_type = login_type
                 user.login()
 
-                return Response({'status': 1, 'message': '登录成功', 'token': token})
+                token = tokenGenerate({"id": user.id, "name": user.loginname})
+
+                return Response({'status': 1, 'message': '登录成功', 'data': token})
+
+
+@api_view(['GET','POST'])
+def user_profile(request):
+    try:
+        token = request.GET['t']
+    except KeyError:
+        return Response({'status': 1, 'message': 'token值不存在'})
+
+    token_data = tokenParse(token)
+
+    if not token_data:
+        return Response({'status': 1, 'message': 'token值不正确'})
+
+    uid = token_data['id']
+
+    try:
+        user = User.objects.get(pk=uid)
+    except User.DoesNotExist:
+        return Response({'status': 1, 'message': 'token解析不出来'})
+
+    if request.method == 'GET':
+        serializer = UserSerializer(user)
+
+        return Response(dict(status=0, message='ok', data = serializer.data))
+
+    elif request.method == 'POST':
+        try:
+            serializer = UserSerializer(user, data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(dict(status=0, message = 'ok'))
+
+            return Response(dict(status=1,message = serializer.errors))
+        except Exception as exc:
+            return Response(dict(status=1,message = exc.detail))
+
+@api_view(['POST','GET'])
+def user_avatar(request):
+    try:
+        token = request.GET['t']
+    except KeyError:
+        return Response({'status': 1, 'message': 'token值不存在'})
+
+    token_data = tokenParse(token)
+
+    if not token_data:
+        return Response({'status': 1, 'message': 'token值不正确'})
+
+    uid = token_data['id']
+
+    try:
+        user = User.objects.get(pk=uid)
+    except User.DoesNotExist:
+        return Response(dict(status=1, message='token解析不出来'))
+
+    if request.method == 'GET':
+        serializer = AvatarSerializer(user)
+        avatar = serializer.data['avatar']
+        return Response(dict(status=0, message='ok', data=avatar))
+
+    elif request.method == 'POST':
+        try:
+            serializer = AvatarSerializer(user, data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                avatar = serializer.data['avatar']
+                return Response(dict(status=0, message = 'ok',data=avatar))
+
+            return Response(dict(status=1,message = serializer.errors))
+        except Exception as exc:
+            return Response(dict(status=1,message = exc.detail))
+
+

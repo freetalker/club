@@ -37,6 +37,11 @@ ALLOWED_HOSTS = [
     'localhost',
 ]
 
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'fitAdmin.auth.fitClubBackend',
+)
+
 
 # Application definition
 
@@ -48,7 +53,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'fitHealth',
+    'fitAdmin',
     'fitApi',
 )
 
@@ -59,7 +64,7 @@ REST_FRAMEWORK = {
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    # 'django.middleware.csrf.CsrfViewMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -86,6 +91,11 @@ TEMPLATES = [
         },
     },
 ]
+
+TEMPLATE_CONTEXT_PROCESSORS = (
+    'django.contrib.auth.context_processors.auth',
+    'django.core.context_processors.media',
+)
 
 WSGI_APPLICATION = 'fitClub.wsgi.application'
 
@@ -130,8 +140,7 @@ DEFAULT_CHARSET = 'utf-8'
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
-
-MEDIA_ROOT = os.path.join(HERE, 'data').replace('\\', '/')
+MEDIA_ROOT=os.path.join(BASE_DIR,'media').replace('\\','/')
 
 STATIC_ROOT = os.path.join(HERE, 'static').replace('\\', '/')
 
@@ -177,7 +186,7 @@ LOGGING = {
         'misfit_handler': {
             'level': 'DEBUG',
             'class': 'logging.handlers.RotatingFileHandler',
-            'filename': 'path1',
+            'filename': 'logs/misfit',
             'formatter': 'standard',
         },
     },

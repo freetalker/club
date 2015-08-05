@@ -13,10 +13,9 @@ Including another URLconf
     1. Add an import:  from blog import urls as blog_urls
     2. Add a URL to urlpatterns:  url(r'^blog/', include(blog_urls))
 """
-from django.conf.urls import include, url
+from django.conf.urls import include, url, patterns
 from django.contrib import admin
 from rest_framework import routers
-from fitHealth import views
 from views import *
 admin.autodiscover()
 
@@ -25,15 +24,23 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 urlpatterns = [
     url(r'^', include('fitApi.urls')),
+    url(r'^', include('fitAdmin.urls')),
     url(r'^misfit$',misfit),
     url(r'^misfit/auth',misfit_authrize),
     url(r'^misfit/notification',misfit_notification),
-    url(r'^admin/', include(admin.site.urls)),
+    url(r'^django-admin/', include(admin.site.urls)),
     url(r'^hello/$', hello),
+    url(r'^login/$', login),
+    url(r'^error/(.+)/$', error),
     url(r'^$', home),
 #    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework'))
 
 
 ]
+from django.conf import settings
+if settings.DEBUG:
+    urlpatterns += patterns('',
+        url(r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root':settings.MEDIA_ROOT}),
+    )
 
 urlpatterns += staticfiles_urlpatterns()

@@ -1,0 +1,41 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title }}</title>
+
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}" >
+    <link rel="stylesheet" type="text/css" href="{% static 'css/ace.min.css' %}" >
+    <script type="text/javascript" src="{% static 'js/ace-extra.min.js'%}"></script>
+</head>
+<body>
+
+这个什么 {{ current_title }}
+
+<div>
+    <button class="btn btn-success js_test">测试</button>
+</div>
+</body>
+<script type="text/javascript" src="{% static 'js/jquery-2.0.3.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/jquery.cookie.js' %}"></script>
+<script type="application/javascript">
+    $(function () {
+        $(document).on("click", ".js_test", function () {
+            $.ajaxSetup({
+                beforeSend: function(xhr, settings){
+                    var csrftoken = $.cookie('csrftoken');
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                }
+            });
+
+            $.post("/misfit", {'t':'t','k':'k'}, function (res) {
+
+                window.open(res.url)
+
+            }, "json");
+        })
+
+    })
+</script>
+</html>

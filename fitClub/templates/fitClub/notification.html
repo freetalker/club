@@ -1,0 +1,38 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title }}</title>
+
+    <link rel="stylesheet" type="text/css" href="{% static 'css/ace.min.css' %}" >
+
+</head>
+<body>
+
+这个什么 {{ current_title }}
+
+<div>
+    <button class="btn btn-success js_test">测试</button>
+</div>
+</body>
+<script type="text/javascript" src="{% static 'js/jquery-2.0.3.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/jquery.cookie.js' %}"></script>
+<script type="application/javascript">
+    $(function () {
+        $(document).on("click", ".js_test", function () {
+            $.ajaxSetup({
+                beforeSend: function(xhr, settings){
+                    var csrftoken = $.cookie('csrftoken');
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                }
+            });
+
+            $.post("/misfit/notification", {"Type":"SubscriptionConfirmation","Token":"b6c65bf402b907d7de7f6cf87b9ce4bb4f66a7c45fd36b246436f07dd208667bc07b206a69de9e3252e8be0ab3334efb08c57275b913ec3e4b21cedae69147e7cb6f8ea76b5bed0d00f944ef7a56d557b14f51293fa2f8e8811b9888b08c548a6e988b59d7dd154ac7190c257254c05c91df80dfb9e149d99cb8aa5724a9fcc9f53a375a94b0dd828c0fc712618036ed","TopicArn":"arn:aws:sns:us-east-1:819895241319:test","Message":"You have chosen to subscribe to the topic arn:aws:sns:us-east-1:819895241319:test.\nTo confirm the subscription, visit the SubscribeURL included in this message.","SubscribeURL":"https://build.misfit.com/apps/554dcf3cbf1f69944e599eed/verify_endpoint?verify_token=$2a$10$ellHichPxhKfNOgfNTWwGeYN2Y7AskSaw5WaF.dNIY1nPmvxggB3a&challenge=f4c7b4b3a427f8de","Timestamp":"2015-07-20T03:58:27.678Z"}, function (res) {
+                console.log(res)
+            }, "json");
+        })
+
+    })
+</script>
+</html>

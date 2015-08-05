@@ -1,0 +1,173 @@
+<div class="sidebar" id="sidebar">
+    <script type="text/javascript">
+        try {
+            ace.settings.check('sidebar', 'fixed');
+        } catch (e) {
+        }
+    </script>
+
+    <div class="sidebar-shortcuts" id="sidebar-shortcuts">
+        <div class="sidebar-shortcuts-large" id="sidebar-shortcuts-large">
+            <button class="btn btn-success">
+                <i class="icon-signal"></i>
+            </button>
+
+            <button class="btn btn-info">
+                <i class="icon-pencil"></i>
+            </button>
+
+            <button class="btn btn-warning">
+                <i class="icon-group"></i>
+            </button>
+
+            <button class="btn btn-danger">
+                <i class="icon-cogs"></i>
+            </button>
+        </div>
+
+        <div class="sidebar-shortcuts-mini" id="sidebar-shortcuts-mini">
+            <span class="btn btn-success"></span>
+
+            <span class="btn btn-info"></span>
+
+            <span class="btn btn-warning"></span>
+
+            <span class="btn btn-danger"></span>
+        </div>
+    </div>
+    <!-- #sidebar-shortcuts -->
+
+    <ul class="nav nav-list">
+        {% if per == 11 %}
+            <li class="active">
+                {% else %}
+            <li>
+        {% endif %}
+        <a href="/admin/user/list">
+            <i class="icon-group"></i>
+            <span class="menu-text"> 会员管理</span>
+        </a>
+        </li>
+
+        {% if per > 20 and per < 30%}
+            <li class="active open">
+                {% else %}
+            <li>
+        {% endif %}
+        <a href="#" class="dropdown-toggle">
+            <i class="icon-home"></i>
+            <span class="menu-text"> 商城管理 </span>
+
+            <b class="arrow icon-angle-down"></b>
+        </a>
+        <ul class="submenu">
+            {% if per == 21 %}
+                <li class="active">
+                    {% else %}
+                <li>
+            {% endif %}
+            <a href="/admin/product/list">
+                <i class="icon-double-angle-right"></i>
+                商品管理
+            </a>
+            </li>
+
+            {% if per == 22 %}
+                <li class="active">
+                    {% else %}
+                <li>
+            {% endif %}
+            <a href="/admin/order/list">
+                <i class="icon-double-angle-right"></i>
+                订单管理
+            </a>
+            </li>
+        </ul>
+        </li>
+
+        {% if per > 30 and per < 40 %}
+            <li class="active open">
+                {% else %}
+            <li>
+        {% endif %}
+        <a href="#" class="dropdown-toggle">
+            <i class="icon-dashboard"></i>
+            <span class="menu-text"> 数据分析 </span>
+            <b class="arrow icon-angle-down"></b>
+        </a>
+
+
+        <ul class="submenu">
+            {% if per == 31 %}
+                <li class="active open">
+                    {% else %}
+                <li>
+            {% endif %}
+            <a href="/admin/stat/user">
+                <i class="icon-double-angle-right"></i>
+                会员数据
+            </a>
+            </li>
+
+            {% if per == 32 %}
+                <li class="active open">
+                    {% else %}
+                <li>
+            {% endif %}
+            <a href="/admin/stat/sport">
+                <i class="icon-double-angle-right"></i>
+                运动数据
+            </a>
+            </li>
+        </ul>
+        </li>
+        {% if per > 40 and per < 50%}
+            <li class="active open">
+                {% else %}
+            <li>
+        {% endif %}
+        <a href="#" class="dropdown-toggle">
+            <i class="icon-cogs"></i>
+            <span class="menu-text"> 系统设置 </span>
+
+            <b class="arrow icon-angle-down"></b>
+        </a>
+
+        <ul class="submenu">
+            {% if per == 41 %}
+                <li class="active">
+                    {% else %}
+                <li>
+            {% endif %}
+            <a href="/admin/config/base">
+                <i class="icon-double-angle-right"></i>
+                基本信息
+            </a>
+            </li>
+            {% if per == 42 %}
+                <li class="active">
+                    {% else %}
+                <li>
+            {% endif %}
+            <a href="/admin/config/alarm">
+                <i class="icon-double-angle-right"></i>
+                提醒设置
+            </a>
+            </li>
+        </ul>
+        </li>
+    </ul>
+    <!-- /.nav-list -->
+
+    <div class="sidebar-collapse" id="sidebar-collapse">
+        <i class="icon-double-angle-left" data-icon1="icon-double-angle-left"
+           data-icon2="icon-double-angle-right"></i>
+    </div>
+
+    <script type="text/javascript">
+        try {
+            ace.settings.check('sidebar', 'collapsed')
+        } catch (e) {
+        }
+    </script>
+</div>

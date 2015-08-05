@@ -1,0 +1,80 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="zh-hans">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="keywords" content=""/>
+    <meta name="description" content=""/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <!-- basic styles -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/font-awesome.min.css' %}"/>
+
+    <!-- page specific plugin styles -->
+    {% block pagecss %}{% endblock %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/sweetalert.css' %}" />
+
+    <!-- ace styles -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/ace.min.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/ace-rtl.min.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/ace-skins.min.css' %}"/>
+
+    <link rel="stylesheet" type="text/css" href="{% static 'css/fitclub.css' %}"/>
+
+    <!-- ace settings handler -->
+    <script type="text/javascript" src="{% static 'js/ace-extra.min.js' %}"></script>
+
+    <title>{% block title %}{% endblock %} - fitClub</title>
+</head>
+<body>
+
+{% block header %}
+    {% include 'fitClub/header.html' %}
+{% endblock %}
+
+
+<div class="main-container" id="main-container">
+    <script type="text/javascript">
+        try {
+            ace.settings.check('main-container', 'fixed');
+        } catch (e) {
+        }
+    </script>
+
+    <div class="main-container-inner">
+        <a class="menu-toggler" id="menu-toggler" href="#">
+            <span class="menu-text"></span>
+        </a>
+
+        {% block siderbar %}
+            {% include 'fitClub/siderbar.html' %}
+        {% endblock %}
+
+        {% block content %}{% endblock %}
+
+        {% block setting %}
+            {% include 'fitClub/setting.html' %}
+        {% endblock %}
+    </div>
+    <!-- /.main-container-inner -->
+
+    <a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
+        <i class="icon-double-angle-up icon-only bigger-110"></i>
+    </a>
+</div>
+
+<!-- base scripts -->
+<script type="text/javascript" src="{% static 'js/jquery-2.0.3.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/jquery.cookie.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/typeahead-bs2.min.js' %}"></script>
+<!-- ace scripts -->
+<script type="text/javascript" src="{% static 'js/ace-elements.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/ace.min.js' %}"></script>
+<!-- page scripts -->
+<script type="text/javascript" src="{% static 'js/sweetalert.min.js' %}"></script>
+{% block pagescripts %}
+{% endblock %}
+</body>
+</html>

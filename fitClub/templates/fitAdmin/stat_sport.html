@@ -1,0 +1,93 @@
+{% extends "fitClub/base.html" %}
+{% load static %}
+
+{% block title %}
+    管理后台
+{% endblock %}
+
+{% block content %}
+
+    <div class="main-content">
+        <div class="breadcrumbs" id="breadcrumbs">
+            <script type="text/javascript">
+                try {
+                    ace.settings.check('breadcrumbs', 'fixed')
+                } catch (e) {
+                }
+            </script>
+
+            <ul class="breadcrumb">
+                <li>
+                    <i class="icon-home home-icon"></i>
+                    <a href="/admin/">首页</a>
+                </li>
+                <li class="active">运动提醒</li>
+            </ul>
+            <!-- .breadcrumb -->
+
+            <div class="nav-search" id="nav-search">
+                <form class="form-search">
+                    <span class="input-icon">
+					    <input type="text" placeholder="搜 用户 ..." class="nav-search-input" id="nav-search-input" autocomplete="off"/>
+                        <i class="icon-search nav-search-icon"></i>
+                    </span>
+                </form>
+            </div>
+            <!-- #nav-search -->
+        </div>
+
+        <div class="page-content">
+            <div class="page-header">
+                <h1>
+                    运动统计
+                    <small>
+                        <i class="icon-double-angle-right"></i>
+                        统计各会员的运动数据
+                    </small>
+                </h1>
+            </div>
+            <div class="row">
+                <div class="col-xs-12">
+                    <div>
+                        <button class="btn" id="gritter-regular">Regular</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.page-content -->
+    </div>
+    <!-- /.main-content -->
+
+{% endblock %}
+
+{% block pagescripts %}
+    <script type="text/javascript">
+        var $path_assets = "{% static ''%}";//this will be used in gritter alerts containing images
+    </script>
+    <script type="text/javascript">
+        $(function () {
+            $('#gritter-regular').on("click", function () {
+                console.log("d")
+                swal({
+                            title: "Error!",
+                            text: "Here's my error message!",
+                            type: "warning",
+                            showCancelButton: true,
+                            confirmButtonColor: "#DD6B55",
+                            confirmButtonText: "Yes, delete it!",
+                            cancelButtonText: "No, cancel plx!",
+                            closeOnConfirm: false,
+                            closeOnCancel: false
+                        },
+                        function (isConfirm) {
+                            if (isConfirm) {
+                                swal("Deleted!", "Your imaginary file has been deleted.", "success");
+                            }
+                            else {
+                                swal("Cancelled", "Your imaginary file is safe :)", "error");
+                            }
+                        });
+            });
+        })
+    </script>
+{% endblock %}

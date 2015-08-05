@@ -41,6 +41,9 @@ def tokenGenerate(dict):
 
 def tokenParse(data):
     token = desDecrypt(data)
-    tmp =  token.split(',')
+    if token:
+        tmp =  token.split(',')
+    else:
+        return ''
 
     return {"id":tmp[0],"name":tmp[1],"time":tmp[2]}

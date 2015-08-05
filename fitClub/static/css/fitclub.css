@@ -1,0 +1,10 @@
+#login-box .header{ line-height: 46px; margin-top: 0}
+
+.navbar .navbar-brand{height: 45px;}
+.ace-nav>li>a>.badge{  line-height: 18px;  width: 18px;  padding: 0;}
+
+.dataTables_paginate{ text-align: left; height: 32px;}
+.dataTables_paginate .pagination{margin:0;}
+.dataTables_info{text-align: right;line-height: 32px;}
+
+.margin-left-10{margin-left: 10px;}
