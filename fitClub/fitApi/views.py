@@ -313,7 +313,7 @@ def sport_stat(request):
     try:
         statSerializer = SportStatSerializer(sportStat)
         dateSerializer = SportDateSerializer(sportDate)
-        return Response(dict(status=0,message='ok',data=dict(total=statSerializer.data, date=dateSerializer.data)))
+        return Response(dict(status=0,message='ok',data=dict(total=statSerializer.data, today=dateSerializer.data)))
     except Exception as exc:
         return Response(dict(status=1,message = exc.detail))
 
