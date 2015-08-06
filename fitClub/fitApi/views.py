@@ -374,7 +374,7 @@ def sport_date(request):
         sportDates = user.sportdate_set.filter(sport_date__range = (start,end)).order_by('sport_date')
 
     if not sportDates:
-        return Response(dict(status=1, message = '时间段 '+start_str+' 至 '+end_str+' 没有运动数据'))
+        return Response(dict(status=1, message = '时间段 '+str(start_str)+' 至 '+str(end_str)+' 没有运动数据，请确保时间段正确'))
 
     result_data = []
     for sportDate in sportDates:
