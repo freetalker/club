@@ -1,6 +1,8 @@
 # coding=utf-8
 from datetime import datetime
 import logging
+from django.db.models import Q
+from django.utils.timezone import now
 from django.views.decorators.csrf import csrf_exempt
 
 from rest_framework import status
@@ -9,8 +11,9 @@ from rest_framework.response import Response
 
 from base.security import *
 
-from fitAdmin.models import User, SportConf
-from fitApi.serializers import UserSerializer, AvatarSerializer, SportConfSerializer
+from fitAdmin.models import User, SportConf,SportDate,SportStat
+from fitApi.serializers import UserSerializer, AvatarSerializer, SportConfSerializer, SportStatSerializer, \
+    SportDateSerializer
 
 
 @api_view(['GET', 'POST'])
@@ -273,4 +276,110 @@ def sport_conf(request):
         except Exception as exc:
             return Response(dict(status=1,message = exc.detail))
 
+@api_view(['GET'])
+def sport_stat(request):
+    try:
+        token = request.GET['t']
+    except KeyError:
+        return Response({'status': 1, 'message': 'token值不存在'})
+
+    token_data = tokenParse(token)
+
+    if not token_data:
+        return Response({'status': 1, 'message': 'token值不正确'})
+
+    uid = token_data['id']
+
+    try:
+        user = User.objects.get(pk=uid)
+    except User.DoesNotExist:
+        return Response(dict(status=1, message='token解析不出来'))
+
+    # 如果没有统计数据，肯定也没有明细的，所以可以直接返回了
+    try:
+        sportStat = user.sportstat
+    except SportStat.DoesNotExist:
+        user.sportstat = SportStat()
+        user.sportstat.save()
+        sportStat = user.sportstat
+
+    today = now().date()
+
+    sportDate = user.sportdate_set.filter(sport_date__exact = today).first()
+    if not sportDate:
+        sportDate = SportDate(user=user,sport_date=today)
+        user.sportdate_set.add(sportDate)
+
+    try:
+        statSerializer = SportStatSerializer(sportStat)
+        dateSerializer = SportDateSerializer(sportDate)
+        return Response(dict(status=0,message='ok',data=dict(total=statSerializer.data, date=dateSerializer.data)))
+    except Exception as exc:
+        return Response(dict(status=1,message = exc.detail))
+
+
+@api_view(['GET'])
+def sport_date(request):
+    try:
+        token = request.GET['t']
+    except KeyError:
+        return Response({'status': 1, 'message': 'token值不存在'})
+
+    token_data = tokenParse(token)
+
+    if not token_data:
+        return Response({'status': 1, 'message': 'token值不正确'})
+
+    uid = token_data['id']
+
+    try:
+        user = User.objects.get(pk=uid)
+    except User.DoesNotExist:
+        return Response(dict(status=1, message='token解析不出来'))
+
+    sportDates = []
+    try:
+        start_str = request.GET['from']
+    except KeyError:
+        # 如果from参数为空，to也无用，默认返回今天的
+        today = now().date()
+        sportDates = user.sportdate_set.filter(sport_date__exact = today)
+
+        if not sportDates:
+            # 没有今天的数据，则初始化一个
+            sportDate = SportDate(user=user,sport_date=today)
+            user.sportdate_set.add(sportDate)
+            sportDates = [sportDate]
+
+    # 如果sportDates 没有数据，则表示存在 from 字段
+    if not sportDates:
+        try:
+            start = datetime.strptime(start_str,'%Y-%m-%d').date()
+        except ValueError:
+            return Response(dict(status=1, message = 'from参数转为日期格式失败'))
+
+        try:
+            end_str = request.GET['to']
+        except KeyError:
+            # 如果没有to参数，则默认到今天
+            end = now().date()
+            end_str = now().strftime('%Y-%m-%d')
+
+        if not end: #有to参数，转为日期
+            try:
+                end = datetime.strptime(start_str,'%Y-%m-%d').date()
+            except ValueError:
+                return Response(dict(status=1, message = 'to参数转为日期格式失败'))
+
+        sportDates = user.sportdate_set.filter(sport_date__range = (start,end)).order_by('sport_date')
+
+    if not sportDates:
+        return Response(dict(status=1, message = '时间段 '+start_str+' 至 '+end_str+' 没有运动数据'))
+
+    result_data = []
+    for sportDate in sportDates:
+        dateSerializer = SportDateSerializer(sportDate)
+        result_data.append(dateSerializer.data)
+
+    return Response(dict(status=0,message='ok',data=result_data))
 

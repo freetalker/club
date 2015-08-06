@@ -9,6 +9,8 @@ urlpatterns = [
     url(r'^api/user/profile/$',views.user_profile),
     url(r'^api/user/avatar/$',views.user_avatar),
     url(r'^api/sport/conf/$',views.sport_conf),
+    url(r'^api/sport/stat/$',views.sport_stat),
+    url(r'^api/sport/date/$',views.sport_date),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

@@ -185,22 +185,29 @@ class HealthSleep(models.Model):
     details = models.CharField(max_length=500, null=True)
 
 # 运动记录
-class Sport(models.Model):
+class SportDate(models.Model):
     user = models.ForeignKey(User)
-    date = models.DateField()
-    points = models.IntegerField()
-    steps = models.IntegerField(null=True)
-    calories = models.FloatField(max_length=9, null=True)
-    distance = models.FloatField(max_length=9)
+    points = models.IntegerField(default=0,null=True)
+    steps = models.IntegerField(default=0,null=True)
+    calories = models.FloatField(max_length=9, null=True,default=0)
+    distances = models.FloatField(max_length=9,null=True,default=0)
+    sport_date = models.DateField(default=timezone.now().today())
+    last_time = models.DateTimeField(default=timezone.now)
+
+    def __unicode__(self):
+        return self.user.loginname
 
 # 运动统计
-class SportStatic(models.Model):
-    user = models.ForeignKey(User)
-    points = models.IntegerField()
-    steps = models.IntegerField()
-    calories = models.FloatField(max_length=9)
-    distance = models.FloatField(max_length=9)
-    end_date = models.DateField()
+class SportStat(models.Model):
+    user = models.OneToOneField(User)
+    points = models.IntegerField(default=0)
+    steps = models.IntegerField(default=0)
+    calories = models.FloatField(max_length=9,default=0)
+    distances = models.FloatField(max_length=9,default=0)
+    last_time = models.DateTimeField(default=timezone.now)
+
+    def __unicode__(self):
+        return self.user.loginname
 
 # 运动目标
 class SportConf(models.Model):
@@ -210,7 +217,6 @@ class SportConf(models.Model):
     calories = models.FloatField(max_length=9,default=0)
     points = models.IntegerField(default=0)
     create_time = models.DateTimeField(default=timezone.now)
-    edit_time = models.DateTimeField(default=timezone.now)
 
     def __unicode__(self):
         return self.user.loginname
