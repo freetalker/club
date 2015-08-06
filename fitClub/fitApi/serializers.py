@@ -16,6 +16,10 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ('id','loginname','nickname','realname','avatar','sex','address','birthday','remark','height','weight')
         read_only_fields = ('id','loginname','avatar')
 
+class UserBriefSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('nickname','realname','avatar','sex')
 
 class AvatarSerializer(serializers.ModelSerializer):
     avatar = serializers.ImageField(use_url=True)

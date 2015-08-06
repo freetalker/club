@@ -2,6 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1edfd412-1fd6-4d63-9699-f630f30c2de1" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/fitClub.sqlite3" afterPath="$PROJECT_DIR$/fitClub.sqlite3" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/fitApi/serializers.py" afterPath="$PROJECT_DIR$/fitApi/serializers.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/fitApi/urls.py" afterPath="$PROJECT_DIR$/fitApi/urls.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/fitApi/views.py" afterPath="$PROJECT_DIR$/fitApi/views.py" />
     </list>
     <ignored path="fitClub.iws" />
@@ -46,7 +49,7 @@
         <entry file="file://$PROJECT_DIR$/fitApi/urls.py">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="12" column="45" selection-start-line="12" selection-start-column="45" selection-end-line="12" selection-end-column="45" />
+              <caret line="13" column="45" selection-start-line="13" selection-start-column="45" selection-end-line="13" selection-end-column="45" />
               <folding />
             </state>
           </provider>
@@ -67,10 +70,11 @@
       <file leaf-file-name="views.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/fitApi/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.3382353">
-              <caret line="373" column="8" selection-start-line="373" selection-start-column="8" selection-end-line="373" selection-end-column="8" />
+            <state vertical-scroll-proportion="0.33333334">
+              <caret line="415" column="0" selection-start-line="415" selection-start-column="0" selection-end-line="415" selection-end-column="0" />
               <folding>
                 <element signature="e#15#44#0" expanded="true" />
+                <element signature="e#10067#12031#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -80,7 +84,7 @@
         <entry file="file://$PROJECT_DIR$/fitApi/serializers.py">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="47" column="82" selection-start-line="47" selection-start-column="82" selection-end-line="47" selection-end-column="82" />
+              <caret line="21" column="18" selection-start-line="21" selection-start-column="18" selection-end-line="21" selection-end-column="18" />
               <folding>
                 <element signature="e#16#54#0" expanded="true" />
               </folding>
@@ -149,9 +153,9 @@
         <option value="$PROJECT_DIR$/requirements.txt" />
         <option value="$PROJECT_DIR$/fitClub/settings.py" />
         <option value="$PROJECT_DIR$/fitAdmin/admin.py" />
-        <option value="$PROJECT_DIR$/fitApi/serializers.py" />
         <option value="$PROJECT_DIR$/fitAdmin/models.py" />
         <option value="$PROJECT_DIR$/fitApi/urls.py" />
+        <option value="$PROJECT_DIR$/fitApi/serializers.py" />
         <option value="$PROJECT_DIR$/fitApi/views.py" />
       </list>
     </option>
@@ -712,7 +716,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="python-line">
           <url>file://$PROJECT_DIR$/fitApi/views.py</url>
-          <line>153</line>
+          <line>154</line>
           <option name="timeStamp" value="57" />
         </line-breakpoint>
       </breakpoints>
@@ -726,13 +730,14 @@
           </properties>
         </breakpoint>
       </default-breakpoints>
-      <option name="time" value="65" />
+      <option name="time" value="66" />
     </breakpoint-manager>
     <watches-manager>
       <configuration name="Python.DjangoServer">
         <watch expression="exc.detail" language="Python" />
         <watch expression="sportStat" language="Python" />
         <watch expression="now()" language="Python" />
+        <watch expression="sportRanks" language="Python" />
       </configuration>
     </watches-manager>
   </component>
@@ -1072,24 +1077,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/fitApi/serializers.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="47" column="82" selection-start-line="47" selection-start-column="82" selection-end-line="47" selection-end-column="82" />
-          <folding>
-            <element signature="e#16#54#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/fitApi/urls.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="12" column="45" selection-start-line="12" selection-start-column="45" selection-end-line="12" selection-end-column="45" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/fitClub/views.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -1097,6 +1084,22 @@
           <folding>
             <element signature="e#15#30#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///Library/Python/2.7/site-packages/rest_framework/views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.6760259">
+          <caret line="464" column="39" selection-start-line="464" selection-start-column="39" selection-end-line="464" selection-end-column="39" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fitApi/urls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="13" column="45" selection-start-line="13" selection-start-column="45" selection-end-line="13" selection-end-column="45" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1110,11 +1113,13 @@
         </state>
       </provider>
     </entry>
-    <entry file="file:///Library/Python/2.7/site-packages/rest_framework/views.py">
+    <entry file="file://$PROJECT_DIR$/fitApi/serializers.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.6760259">
-          <caret line="464" column="39" selection-start-line="464" selection-start-column="39" selection-end-line="464" selection-end-column="39" />
-          <folding />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="21" column="18" selection-start-line="21" selection-start-column="18" selection-end-line="21" selection-end-column="18" />
+          <folding>
+            <element signature="e#16#54#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1128,10 +1133,11 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/fitApi/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.3382353">
-          <caret line="373" column="8" selection-start-line="373" selection-start-column="8" selection-end-line="373" selection-end-column="8" />
+        <state vertical-scroll-proportion="0.33333334">
+          <caret line="415" column="0" selection-start-line="415" selection-start-column="0" selection-end-line="415" selection-end-column="0" />
           <folding>
             <element signature="e#15#44#0" expanded="true" />
+            <element signature="e#10067#12031#0" expanded="false" />
           </folding>
         </state>
       </provider>

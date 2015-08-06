@@ -1,6 +1,7 @@
 # coding=utf-8
 from datetime import datetime
 import logging
+from django.core.exceptions import FieldError
 from django.db.models import Q
 from django.utils.timezone import now
 from django.views.decorators.csrf import csrf_exempt
@@ -13,7 +14,7 @@ from base.security import *
 
 from fitAdmin.models import User, SportConf,SportDate,SportStat
 from fitApi.serializers import UserSerializer, AvatarSerializer, SportConfSerializer, SportStatSerializer, \
-    SportDateSerializer
+    SportDateSerializer, UserBriefSerializer
 
 
 @api_view(['GET', 'POST'])
@@ -383,3 +384,48 @@ def sport_date(request):
 
     return Response(dict(status=0,message='ok',data=result_data))
 
+
+
+@api_view(['GET'])
+def sport_rank(request):
+    try:
+        token = request.GET['t']
+    except KeyError:
+        return Response({'status': 1, 'message': 'token值不存在'})
+
+    token_data = tokenParse(token)
+
+    if not token_data:
+        return Response({'status': 1, 'message': 'token值不正确'})
+
+    uid = token_data['id']
+
+    try:
+        user = User.objects.get(pk=uid)
+    except User.DoesNotExist:
+        return Response(dict(status=1, message='token解析不出来'))
+
+    today = now().date()
+    rank_type = 'steps'
+    try:
+        # 支持多种排序规则 steps,points,distances,calories, 默认是steps
+        rank_type = request.GET['type']
+    except KeyError:
+        rank_type = 'steps'
+
+    try:
+        sportRanks = SportDate.objects.filter(sport_date__exact = today).order_by('-'+rank_type)[0:10];
+
+        result_date = []
+        rank = 1
+        for sportRank in sportRanks:
+            dateSerializer = SportDateSerializer(sportRank)
+            userSerializer = UserBriefSerializer(sportRank.user)
+            result_date.append(dict(rank=rank, sport=dateSerializer.data, user=userSerializer.data))
+            rank += 1
+
+        return Response(dict(status=0,message='ok',data=result_date))
+    except FieldError:
+        return Response(dict(status=1, message='排序字段只能是：steps,points,distances,calories'))
+    except:
+        return Response(dict(status=1, message='获取排名发生异常，请重试'))
