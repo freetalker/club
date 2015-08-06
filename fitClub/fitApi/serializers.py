@@ -1,7 +1,7 @@
 # coding=utf-8
 
 from rest_framework import serializers
-from fitAdmin.models import User
+from fitAdmin.models import *
 
 class UserSerializer(serializers.ModelSerializer):
     nickname = serializers.CharField(allow_null=True, required=False)
@@ -23,3 +23,14 @@ class AvatarSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('avatar',)
+
+
+class SportConfSerializer(serializers.ModelSerializer):
+    points = serializers.IntegerField(required=False)
+    steps = serializers.IntegerField(required=False)
+    distances = serializers.FloatField(required=False)
+    calories = serializers.FloatField(required=False)
+
+    class Meta:
+        model = SportConf
+        fields = ('points','steps','distances','calories')

@@ -1,5 +1,6 @@
 # coding=utf-8
 from datetime import datetime
+import logging
 from django.views.decorators.csrf import csrf_exempt
 
 from rest_framework import status
@@ -8,8 +9,8 @@ from rest_framework.response import Response
 
 from base.security import *
 
-from fitAdmin.models import User
-from fitApi.serializers import UserSerializer, AvatarSerializer
+from fitAdmin.models import User, SportConf
+from fitApi.serializers import UserSerializer, AvatarSerializer, SportConfSerializer
 
 
 @api_view(['GET', 'POST'])
@@ -113,13 +114,14 @@ def user_login(request, format=None):
 
                 return Response({'status': 1, 'message': '登录成功', 'data': token})
 
-
 @api_view(['GET','POST'])
 def user_profile(request):
     try:
         token = request.GET['t']
     except KeyError:
         return Response({'status': 1, 'message': 'token值不存在'})
+
+    log = logging.getLogger('common')
 
     token_data = tokenParse(token)
 
@@ -180,6 +182,92 @@ def user_avatar(request):
                 serializer.save()
                 avatar = serializer.data['avatar']
                 return Response(dict(status=0, message = 'ok',data=avatar))
+
+            return Response(dict(status=1,message = serializer.errors))
+        except Exception as exc:
+            return Response(dict(status=1,message = exc.detail))
+
+
+@api_view(['GET','POST'])
+def user_profile(request):
+    try:
+        token = request.GET['t']
+    except KeyError:
+        return Response({'status': 1, 'message': 'token值不存在'})
+
+    log = logging.getLogger('common')
+
+    token_data = tokenParse(token)
+
+    if not token_data:
+        return Response({'status': 1, 'message': 'token值不正确'})
+
+    uid = token_data['id']
+
+    try:
+        user = User.objects.get(pk=uid)
+    except User.DoesNotExist:
+        return Response({'status': 1, 'message': 'token解析不出来'})
+
+    if request.method == 'GET':
+        serializer = UserSerializer(user)
+
+        return Response(dict(status=0, message='ok', data = serializer.data))
+
+    elif request.method == 'POST':
+        try:
+            serializer = UserSerializer(user, data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(dict(status=0, message = 'ok'))
+
+            return Response(dict(status=1,message = serializer.errors))
+        except Exception as exc:
+            return Response(dict(status=1,message = exc.detail))
+
+@api_view(['POST','GET'])
+def sport_conf(request):
+    try:
+        token = request.GET['t']
+    except KeyError:
+        return Response({'status': 1, 'message': 'token值不存在'})
+
+    token_data = tokenParse(token)
+
+    if not token_data:
+        return Response({'status': 1, 'message': 'token值不正确'})
+
+    uid = token_data['id']
+
+    try:
+        user = User.objects.get(pk=uid)
+    except User.DoesNotExist:
+        return Response(dict(status=1, message='token解析不出来'))
+
+    if request.method == 'GET':
+        try:
+            sportConf = user.sportconf
+        except SportConf.DoesNotExist:
+            return Response(dict(status=1,message='未设置目标'))
+
+        serializer = SportConfSerializer(sportConf)
+        return Response(dict(status=0, message='ok', data=serializer.data))
+
+    elif request.method == 'POST':
+        '''
+        如果没有设置目标的话，可以通过POST创建目标，首先初始化一个
+        '''
+        try:
+            sportConf = user.sportconf
+        except SportConf.DoesNotExist:
+            user.sportconf = SportConf()
+            sportConf = user.sportconf
+
+        try:
+            serializer = SportConfSerializer(sportConf, data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(dict(status=0, message = 'ok',data=serializer.data))
 
             return Response(dict(status=1,message = serializer.errors))
         except Exception as exc:

@@ -123,7 +123,7 @@ class User(models.Model):
 
 class MemberLevel(models.Model):
     name = models.CharField(max_length=20)
-    descriptipn = models.CharField(max_length=200, null=True)
+    description = models.CharField(max_length=200, null=True)
 
     def __unicode__(self):
         return self.name
@@ -204,11 +204,16 @@ class SportStatic(models.Model):
 
 # 运动目标
 class SportConf(models.Model):
-    user = models.ForeignKey(User)
-    steps = models.IntegerField()
-    calories = models.FloatField(max_length=9)
-    create_time = models.DateTimeField()
-    edit_time = models.DateTimeField()
+    user = models.OneToOneField(User)
+    steps = models.IntegerField(default=0)
+    distances = models.FloatField(max_length=9,default=0)
+    calories = models.FloatField(max_length=9,default=0)
+    points = models.IntegerField(default=0)
+    create_time = models.DateTimeField(default=timezone.now)
+    edit_time = models.DateTimeField(default=timezone.now)
+
+    def __unicode__(self):
+        return self.user.loginname
 
 # 运动明细
 class SportDetail(models.Model):

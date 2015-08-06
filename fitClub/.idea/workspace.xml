@@ -2,57 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1edfd412-1fd6-4d63-9699-f630f30c2de1" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/fitAdmin/auth.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/templates/fitClub/base.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/templates/fitAdmin/conf_alarm.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/templates/fitAdmin/conf_base.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/templates/fitClub/error-404.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/templates/fitClub/error-500.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/css/fitclub.css" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/templates/fitClub/footer.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/templates/fitClub/header.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/templates/fitClub/login.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/templates/fitClub/logout.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/templates/fitClub/misfit.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/templates/fitClub/notification.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/templates/fitAdmin/order_list.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/templates/fitAdmin/product_list.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/templates/fitClub/setting.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/templates/fitClub/siderbar.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/templates/fitAdmin/stat_sport.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/templates/fitAdmin/stat_user.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/fitAdmin/urls.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/templates/fitAdmin/user_list.html" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fitHealth/migrations/0001_initial.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fitHealth/migrations/0002_auto_20150705_0256.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fitHealth/migrations/0003_auto_20150714_2324.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fitHealth/migrations/0004_auto_20150714_2327.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fitHealth/migrations/0005_auto_20150714_2335.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fitHealth/migrations/0006_auto_20150716_1525.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/fitHealth/migrations/0007_auto_20150716_1527.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/static/css/bootstrap-theme.css.map" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/static/css/bootstrap.css.map" afterPath="" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/fitHealth/__init__.py" afterPath="$PROJECT_DIR$/fitAdmin/migrations/__init__.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/fitHealth/admin.py" afterPath="$PROJECT_DIR$/fitAdmin/admin.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/fitHealth/migrations/__init__.py" afterPath="$PROJECT_DIR$/fitAdmin/__init__.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/fitHealth/models.py" afterPath="$PROJECT_DIR$/fitAdmin/models.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/fitHealth/serializers.py" afterPath="$PROJECT_DIR$/fitAdmin/serializers.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/fitHealth/tests.py" afterPath="$PROJECT_DIR$/fitAdmin/tests.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/fitHealth/views.py" afterPath="$PROJECT_DIR$/fitAdmin/views.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/templates/fitHealth/index.html" afterPath="$PROJECT_DIR$/templates/fitAdmin/index.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../docs/db/db.xls" afterPath="$PROJECT_DIR$/../docs/db/db.xls" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/fitClub.sqlite3" afterPath="$PROJECT_DIR$/fitClub.sqlite3" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static/css/bootstrap.min.css" afterPath="$PROJECT_DIR$/static/css/bootstrap.min.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/encodings.xml" afterPath="$PROJECT_DIR$/.idea/encodings.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/fitClub/index.html" afterPath="$PROJECT_DIR$/templates/fitClub/index.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/base/security.py" afterPath="$PROJECT_DIR$/base/security.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/fitAdmin/models.py" afterPath="$PROJECT_DIR$/fitAdmin/models.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/requirements.txt" afterPath="$PROJECT_DIR$/requirements.txt" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/fitApi/serializers.py" afterPath="$PROJECT_DIR$/fitApi/serializers.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/fitClub/settings.py" afterPath="$PROJECT_DIR$/fitClub/settings.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/fitApi/urls.py" afterPath="$PROJECT_DIR$/fitApi/urls.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/fitClub/urls.py" afterPath="$PROJECT_DIR$/fitClub/urls.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/fitApi/views.py" afterPath="$PROJECT_DIR$/fitApi/views.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/fitClub/views.py" afterPath="$PROJECT_DIR$/fitClub/views.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="fitClub.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -80,11 +36,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="models.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="models.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/fitAdmin/models.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="60" column="43" selection-start-line="60" selection-start-column="43" selection-end-line="60" selection-end-column="43" />
+            <state vertical-scroll-proportion="0.93303573">
+              <caret line="212" column="58" selection-start-line="212" selection-start-column="58" selection-end-line="212" selection-end-column="58" />
               <folding>
                 <element signature="e#15#29#0" expanded="true" />
               </folding>
@@ -96,29 +52,29 @@
         <entry file="file://$PROJECT_DIR$/fitApi/urls.py">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="9" column="47" selection-start-line="9" selection-start-column="47" selection-end-line="9" selection-end-column="47" />
-              <folding>
-                <element signature="e#0#32#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="urls.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/fitAdmin/urls.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="13" column="49" selection-start-line="13" selection-start-column="49" selection-end-line="13" selection-end-column="49" />
+              <caret line="10" column="47" selection-start-line="10" selection-start-column="47" selection-end-line="10" selection-end-column="47" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="views.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="views.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/fitClub/views.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="105" column="8" selection-start-line="105" selection-start-column="8" selection-end-line="105" selection-end-column="30" />
+              <folding>
+                <element signature="e#15#30#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="views.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/fitApi/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.5788337">
-              <caret line="181" column="70" selection-start-line="181" selection-start-column="70" selection-end-line="181" selection-end-column="70" />
+            <state vertical-scroll-proportion="0.0">
+              <caret line="276" column="0" selection-start-line="276" selection-start-column="0" selection-end-line="276" selection-end-column="0" />
               <folding>
                 <element signature="e#15#44#0" expanded="true" />
               </folding>
@@ -126,11 +82,21 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="stat_user.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/templates/fitAdmin/stat_user.html">
+      <file leaf-file-name="settings.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/fitClub/settings.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-8.291667">
-              <caret line="55" column="39" selection-start-line="55" selection-start-column="39" selection-end-line="55" selection-end-column="39" />
+            <state vertical-scroll-proportion="0.0">
+              <caret line="194" column="36" selection-start-line="194" selection-start-column="36" selection-end-line="194" selection-end-column="36" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="security.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/base/security.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="20" column="11" selection-start-line="20" selection-start-column="11" selection-end-line="20" selection-end-column="11" />
               <folding />
             </state>
           </provider>
@@ -140,21 +106,9 @@
         <entry file="file://$PROJECT_DIR$/fitApi/serializers.py">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="18" column="0" selection-start-line="18" selection-start-column="0" selection-end-line="18" selection-end-column="0" />
+              <caret line="31" column="52" selection-start-line="31" selection-start-column="52" selection-end-line="31" selection-end-column="52" />
               <folding>
                 <element signature="e#16#54#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="views.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/fitAdmin/views.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="116" column="67" selection-start-line="116" selection-start-column="67" selection-end-line="116" selection-end-column="67" />
-              <folding>
-                <element signature="e#16#45#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -222,16 +176,17 @@
         <option value="$PROJECT_DIR$/base/security.py" />
         <option value="$PROJECT_DIR$/base/dateEncoder" />
         <option value="$PROJECT_DIR$/base/dateEncoder.py" />
-        <option value="$PROJECT_DIR$/fitApi/urls.py" />
         <option value="$PROJECT_DIR$/templates/fitClub/base.html" />
         <option value="$PROJECT_DIR$/templates/fitAdmin/index.html" />
         <option value="$PROJECT_DIR$/static/js/ajaxfileupload.js" />
-        <option value="$PROJECT_DIR$/fitClub/settings.py" />
         <option value="$PROJECT_DIR$/fitAdmin/urls.py" />
         <option value="$PROJECT_DIR$/templates/fitAdmin/stat_user.html" />
         <option value="$PROJECT_DIR$/fitAdmin/views.py" />
-        <option value="$PROJECT_DIR$/fitAdmin/models.py" />
+        <option value="$PROJECT_DIR$/requirements.txt" />
+        <option value="$PROJECT_DIR$/fitClub/settings.py" />
         <option value="$PROJECT_DIR$/fitApi/serializers.py" />
+        <option value="$PROJECT_DIR$/fitApi/urls.py" />
+        <option value="$PROJECT_DIR$/fitAdmin/models.py" />
         <option value="$PROJECT_DIR$/fitApi/views.py" />
       </list>
     </option>
@@ -749,10 +704,10 @@
     <frame x="0" y="23" width="1440" height="800" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32768363" sideWeight="0.4914163" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32768363" sideWeight="0.4914163" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32768363" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3064972" sideWeight="0.4914163" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3064972" sideWeight="0.4914163" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32768363" sideWeight="0.50572246" order="11" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32768363" sideWeight="0.49427754" order="8" side_tool="false" content_ui="tabs" />
@@ -791,7 +746,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="python-line">
           <url>file://$PROJECT_DIR$/fitApi/views.py</url>
-          <line>148</line>
+          <line>150</line>
           <option name="timeStamp" value="57" />
         </line-breakpoint>
       </breakpoints>
@@ -814,14 +769,6 @@
     </watches-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file:///Library/Python/2.7/site-packages/django/http/request.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.3316583">
-          <caret line="236" column="0" selection-start-line="236" selection-start-column="0" selection-end-line="236" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file:///Library/Python/2.7/site-packages/misfit/notification.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -1043,14 +990,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/base/security.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="1.2333333">
-          <caret line="41" column="4" selection-start-line="41" selection-start-column="4" selection-end-line="41" selection-end-column="4" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file:///Library/Python/2.7/site-packages/django/core/management/base.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.49460045">
@@ -1115,32 +1054,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/fitApi/urls.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="9" column="47" selection-start-line="9" selection-start-column="47" selection-end-line="9" selection-end-column="47" />
-          <folding>
-            <element signature="e#0#32#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/fitClub/views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="4.146868">
-          <caret line="145" column="0" selection-start-line="145" selection-start-column="0" selection-end-line="145" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/fitClub/settings.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="66" column="4" selection-start-line="66" selection-start-column="4" selection-end-line="66" selection-end-column="4" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/templates/fitAdmin/stat_user.html">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-8.291667">
@@ -1157,40 +1070,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/fitAdmin/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="60" column="43" selection-start-line="60" selection-start-column="43" selection-end-line="60" selection-end-column="43" />
-          <folding>
-            <element signature="e#15#29#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/fitAdmin/views.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="116" column="67" selection-start-line="116" selection-start-column="67" selection-end-line="116" selection-end-column="67" />
           <folding>
             <element signature="e#16#45#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/fitAdmin/urls.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="13" column="49" selection-start-line="13" selection-start-column="49" selection-end-line="13" selection-end-column="49" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/fitApi/serializers.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="18" column="0" selection-start-line="18" selection-start-column="0" selection-end-line="18" selection-end-column="0" />
-          <folding>
-            <element signature="e#16#54#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1211,12 +1096,82 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/fitClub/settings.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="194" column="36" selection-start-line="194" selection-start-column="36" selection-end-line="194" selection-end-column="36" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/requirements.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="5" column="10" selection-start-line="5" selection-start-column="10" selection-end-line="5" selection-end-column="10" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/base/security.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="20" column="11" selection-start-line="20" selection-start-column="11" selection-end-line="20" selection-end-column="11" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fitApi/serializers.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="31" column="52" selection-start-line="31" selection-start-column="52" selection-end-line="31" selection-end-column="52" />
+          <folding>
+            <element signature="e#16#54#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fitClub/views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="105" column="8" selection-start-line="105" selection-start-column="8" selection-end-line="105" selection-end-column="30" />
+          <folding>
+            <element signature="e#15#30#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fitAdmin/urls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.36830357">
+          <caret line="12" column="51" selection-start-line="12" selection-start-column="51" selection-end-line="12" selection-end-column="51" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fitApi/urls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="10" column="47" selection-start-line="10" selection-start-column="47" selection-end-line="10" selection-end-column="47" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/fitApi/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.5788337">
-          <caret line="181" column="70" selection-start-line="181" selection-start-column="70" selection-end-line="181" selection-end-column="70" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="276" column="0" selection-start-line="276" selection-start-column="0" selection-end-line="276" selection-end-column="0" />
           <folding>
             <element signature="e#15#44#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fitAdmin/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.93303573">
+          <caret line="212" column="58" selection-start-line="212" selection-start-column="58" selection-end-line="212" selection-end-column="58" />
+          <folding>
+            <element signature="e#15#29#0" expanded="true" />
           </folding>
         </state>
       </provider>

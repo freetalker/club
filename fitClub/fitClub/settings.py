@@ -189,6 +189,12 @@ LOGGING = {
             'filename': 'logs/misfit',
             'formatter': 'standard',
         },
+        'common_handler': {
+            'level': 'DEBUG',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': 'logs/common',
+            'formatter': 'standard',
+        },
     },
     'loggers': {
         'django.request': {
@@ -198,6 +204,11 @@ LOGGING = {
         },
         'misfit': {
             'handlers': ['misfit_handler'],
+            'level': 'INFO',
+            'propagate': False
+        },
+        'common':{
+            'handlers': ['common_handler'],
             'level': 'INFO',
             'propagate': False
         },
