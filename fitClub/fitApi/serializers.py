@@ -56,3 +56,16 @@ class SportDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = SportDetail
         fields = ('create_time','end_time','duration','type','points','steps','calories','distances')
+
+class KnowledgeSerializer(serializers.ModelSerializer):
+    cover = serializers.ImageField(source='cover_path')
+    class Meta:
+        model = Knowledge
+        fields = ('id','create_time','title','cover','content','author')
+
+class KnowledgeTypeSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = KnowledgeType
+        fields = ('id','name',)
+

@@ -26,3 +26,6 @@ admin.site.register(SportDate)
 admin.site.register(SportConf)
 admin.site.register(SportDetail)
 admin.site.register(SportStat)
+
+admin.site.register(Knowledge)
+admin.site.register(KnowledgeType)

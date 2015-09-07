@@ -1,5 +1,5 @@
 # coding=utf-8
-from datetime import datetime
+from datetime import datetime, timedelta, date
 import logging
 from django.core.exceptions import FieldError
 from django.utils.timezone import now
@@ -10,9 +10,9 @@ from rest_framework.response import Response
 
 from base.security import *
 
-from fitAdmin.models import User, SportConf,SportDate,SportStat,SportDetail
+from fitAdmin.models import User, SportConf, SportDate, SportStat, SportDetail,Knowledge,KnowledgeType
 from fitApi.serializers import UserSerializer, AvatarSerializer, SportConfSerializer, SportStatSerializer, \
-    SportDateSerializer,SportDetailSerializer, UserBriefSerializer
+    SportDateSerializer, SportDetailSerializer, UserBriefSerializer,KnowledgeSerializer,KnowledgeTypeSerializer
 
 
 @api_view(['GET', 'POST'])
@@ -116,6 +116,7 @@ def user_login(request):
 
                 return Response({'status': 1, 'message': '登录成功', 'data': token})
 
+
 @api_view(['GET', 'POST'])
 def user_profile(request):
     try:
@@ -140,20 +141,21 @@ def user_profile(request):
     if request.method == 'GET':
         serializer = UserSerializer(user)
 
-        return Response(dict(status=0, message='ok', data = serializer.data))
+        return Response(dict(status=0, message='ok', data=serializer.data))
 
     elif request.method == 'POST':
         try:
             serializer = UserSerializer(user, data=request.data)
             if serializer.is_valid():
                 serializer.save()
-                return Response(dict(status=0, message = 'ok'))
+                return Response(dict(status=0, message='ok'))
 
-            return Response(dict(status=1,message = serializer.errors))
+            return Response(dict(status=1, message=serializer.errors))
         except Exception as exc:
-            return Response(dict(status=1,message = exc.detail))
+            return Response(dict(status=1, message=exc.detail))
 
-@api_view(['POST','GET'])
+
+@api_view(['POST', 'GET'])
 def user_avatar(request):
     try:
         token = request.GET['t']
@@ -183,14 +185,14 @@ def user_avatar(request):
             if serializer.is_valid():
                 serializer.save()
                 avatar = serializer.data['avatar']
-                return Response(dict(status=0, message = 'ok',data=avatar))
+                return Response(dict(status=0, message='ok', data=avatar))
 
-            return Response(dict(status=1,message = serializer.errors))
+            return Response(dict(status=1, message=serializer.errors))
         except Exception as exc:
-            return Response(dict(status=1,message = exc.detail))
+            return Response(dict(status=1, message=exc.detail))
 
 
-@api_view(['GET','POST'])
+@api_view(['GET', 'POST'])
 def user_profile(request):
     try:
         token = request.GET['t']
@@ -214,20 +216,21 @@ def user_profile(request):
     if request.method == 'GET':
         serializer = UserSerializer(user)
 
-        return Response(dict(status=0, message='ok', data = serializer.data))
+        return Response(dict(status=0, message='ok', data=serializer.data))
 
     elif request.method == 'POST':
         try:
             serializer = UserSerializer(user, data=request.data)
             if serializer.is_valid():
                 serializer.save()
-                return Response(dict(status=0, message = 'ok'))
+                return Response(dict(status=0, message='ok'))
 
-            return Response(dict(status=1,message = serializer.errors))
+            return Response(dict(status=1, message=serializer.errors))
         except Exception as exc:
-            return Response(dict(status=1,message = exc.detail))
+            return Response(dict(status=1, message=exc.detail))
 
-@api_view(['POST','GET'])
+
+@api_view(['POST', 'GET'])
 def sport_conf(request):
     try:
         token = request.GET['t']
@@ -250,7 +253,7 @@ def sport_conf(request):
         try:
             sportConf = user.sportconf
         except SportConf.DoesNotExist:
-            return Response(dict(status=1,message='未设置目标'))
+            return Response(dict(status=1, message='未设置目标'))
 
         serializer = SportConfSerializer(sportConf)
         return Response(dict(status=0, message='ok', data=serializer.data))
@@ -269,11 +272,12 @@ def sport_conf(request):
             serializer = SportConfSerializer(sportConf, data=request.data)
             if serializer.is_valid():
                 serializer.save()
-                return Response(dict(status=0, message = 'ok',data=serializer.data))
+                return Response(dict(status=0, message='ok', data=serializer.data))
 
-            return Response(dict(status=1,message = serializer.errors))
+            return Response(dict(status=1, message=serializer.errors))
         except Exception as exc:
-            return Response(dict(status=1,message = exc.detail))
+            return Response(dict(status=1, message=exc.detail))
+
 
 @api_view(['GET'])
 def sport_stat(request):
@@ -304,17 +308,17 @@ def sport_stat(request):
 
     today = now().date()
 
-    sportDate = user.sportdate_set.filter(sport_date__exact = today).first()
+    sportDate = user.sportdate_set.filter(sport_date__exact=today).first()
     if not sportDate:
-        sportDate = SportDate(user=user,sport_date=today)
+        sportDate = SportDate(user=user, sport_date=today)
         user.sportdate_set.add(sportDate)
 
     try:
         statSerializer = SportStatSerializer(sportStat)
         dateSerializer = SportDateSerializer(sportDate)
-        return Response(dict(status=0,message='ok',data=dict(total=statSerializer.data, today=dateSerializer.data)))
+        return Response(dict(status=0, message='ok', data=dict(total=statSerializer.data, today=dateSerializer.data)))
     except Exception as exc:
-        return Response(dict(status=1,message = exc.detail))
+        return Response(dict(status=1, message=exc.detail))
 
 
 @api_view(['GET'])
@@ -342,20 +346,20 @@ def sport_date(request):
     except KeyError:
         # 如果from参数为空，to也无用，默认返回今天的
         today = now().date()
-        sportDates = user.sportdate_set.filter(sport_date__exact = today)
+        sportDates = user.sportdate_set.filter(sport_date__exact=today)
 
         if not sportDates:
             # 没有今天的数据，则初始化一个
-            sportDate = SportDate(user=user,sport_date=today)
+            sportDate = SportDate(user=user, sport_date=today)
             user.sportdate_set.add(sportDate)
             sportDates = [sportDate]
 
     # 如果sportDates 没有数据，则表示存在 from 字段
     if not sportDates:
         try:
-            start = datetime.strptime(start_str,'%Y-%m-%d').date()
+            start = datetime.strptime(start_str, '%Y-%m-%d').date()
         except ValueError:
-            return Response(dict(status=1, message = 'from参数转为日期格式失败'))
+            return Response(dict(status=1, message='from参数转为日期格式失败'))
 
         try:
             end_str = request.GET['to']
@@ -364,23 +368,23 @@ def sport_date(request):
             end = now().date()
             end_str = now().strftime('%Y-%m-%d')
 
-        if not end: #有to参数，转为日期
+        if not end:  # 有to参数，转为日期
             try:
-                end = datetime.strptime(end_str,'%Y-%m-%d').date()
+                end = datetime.strptime(end_str, '%Y-%m-%d').date()
             except ValueError:
-                return Response(dict(status=1, message = 'to参数转为日期格式失败'))
+                return Response(dict(status=1, message='to参数转为日期格式失败'))
 
-        sportDates = user.sportdate_set.filter(sport_date__range = (start,end)).order_by('sport_date')
+        sportDates = user.sportdate_set.filter(sport_date__range=(start, end)).order_by('sport_date')
 
     if not sportDates:
-        return Response(dict(status=1, message = '时间段 '+str(start_str)+' 至 '+str(end_str)+' 没有运动数据，请确保时间段正确'))
+        return Response(dict(status=1, message='时间段 ' + str(start_str) + ' 至 ' + str(end_str) + ' 没有运动数据，请确保时间段正确'))
 
     result_data = []
     for sportDate in sportDates:
         dateSerializer = SportDateSerializer(sportDate)
         result_data.append(dateSerializer.data)
 
-    return Response(dict(status=0,message='ok',data=result_data))
+    return Response(dict(status=0, message='ok', data=result_data))
 
 
 '''
@@ -388,6 +392,8 @@ def sport_date(request):
 t：token
 type：排名类型 steps,points,distances,calories
 '''
+
+
 @api_view(['GET'])
 def sport_rank(request):
     try:
@@ -416,7 +422,7 @@ def sport_rank(request):
         rank_type = 'steps'
 
     try:
-        sportRanks = SportDate.objects.filter(sport_date__exact=today).order_by('-'+rank_type)[0:10];
+        sportRanks = SportDate.objects.filter(sport_date__exact=today).order_by('-' + rank_type)[0:10];
 
         result_date = []
         rank = 1
@@ -426,7 +432,7 @@ def sport_rank(request):
             result_date.append(dict(rank=rank, sport=dateSerializer.data, user=userSerializer.data))
             rank += 1
 
-        return Response(dict(status=0,message='ok',data=result_date))
+        return Response(dict(status=0, message='ok', data=result_date))
     except FieldError:
         return Response(dict(status=1, message='排序字段只能是：steps,points,distances,calories'))
     except:
@@ -463,7 +469,7 @@ def sport_detail(request):
     except KeyError:
         # 如果from参数为空，to也无用，默认返回今天的所有运动数据
 
-        today_begin = time.strftime('%Y-%m-%d 0:0:0',time.localtime(time.time()))
+        today_begin = time.strftime('%Y-%m-%d 0:0:0', time.localtime(time.time()))
         sport_details = user.sportdetail_set.filter(create_time__gte=today_begin).order_by('create_time')
 
         if not sport_details:
@@ -473,7 +479,7 @@ def sport_detail(request):
     # 说明form存在
     if not sport_details:
         try:
-            start = datetime.strptime(start_str+' 0:0:0','%Y-%m-%d %H:%M:%S')
+            start = datetime.strptime(start_str + ' 0:0:0', '%Y-%m-%d %H:%M:%S')
         except ValueError:
             return Response(dict(status=1, message='from参数转为日期格式失败'))
 
@@ -484,19 +490,20 @@ def sport_detail(request):
             end = datetime.now()
             end_str = end.strftime("%Y-%m-%d")
 
-        if not end: #有to参数，转为日期
+        if not end:  # 有to参数，转为日期
             try:
-                end = datetime.strptime(end_str+' 23:59:59','%Y-%m-%d %H:%M:%S')
+                end = datetime.strptime(end_str + ' 23:59:59', '%Y-%m-%d %H:%M:%S')
             except ValueError:
                 return Response(dict(status=1, message='to参数转为日期格式失败'))
 
         if start > end:
-            return Response(dict(status=1, message='开始时间: '+str(start_str)+' 大于 结束时间: '+str(end_str)+' ，请确保时间段正确'))
+            return Response(
+                dict(status=1, message='开始时间: ' + str(start_str) + ' 大于 结束时间: ' + str(end_str) + ' ，请确保时间段正确'))
 
-        sport_details = user.sportdetail_set.filter(create_time__range=(start,end)).order_by('create_time')
+        sport_details = user.sportdetail_set.filter(create_time__range=(start, end)).order_by('create_time')
 
     if not sport_details:
-        return Response(dict(status=1, message='时间段 '+str(start_str)+' 至 '+str(end_str)+' 没有运动数据，请确保时间段正确'))
+        return Response(dict(status=1, message='时间段 ' + str(start_str) + ' 至 ' + str(end_str) + ' 没有运动数据，请确保时间段正确'))
 
     result_data = []
     for sport__detail in sport_details:
@@ -504,3 +511,208 @@ def sport_detail(request):
         result_data.append(detail_serializer.data)
 
     return Response(dict(status=0, message='ok', data=result_data))
+
+'''
+健康宣教未读数量
+    最新的，但是未查看的知识
+
+'''
+# TODO 是否需要验证呢？
+@api_view(['GET'])
+def knowledge_new_count(request):
+    try:
+        token = request.GET['t']
+    except KeyError:
+        return Response({'status': 1, 'message': 'token值不存在'})
+
+    token_data = tokenParse(token)
+
+    if not token_data:
+        return Response({'status': 1, 'message': 'token值不正确'})
+
+    uid = token_data['id']
+
+    try:
+        user = User.objects.get(pk=uid)
+    except User.DoesNotExist:
+        return Response(dict(status=1, message='token解析不出来'))
+
+    new_count = 0
+    from_str = request.GET.get('from',1)
+
+    # 必须要传个from参数 时间
+    if from_str == 1:
+        return Response(dict(status=1, message='from参数不能为空，必须是日期格式，格式必须是 yyyy-mm-dd HH:mm:ss'))
+
+    try:
+        from_time = datetime.strptime(from_str, '%Y-%m-%d %H:%M:%S')
+    except ValueError:
+        return Response(dict(status=1, message='from参数转为日期格式失败，格式必须是 yyyy-mm-dd HH:mm:ss'))
+
+    no_read = Knowledge.objects.filter(create_time__gte=from_time).count()
+
+    return Response(dict(status=0, message='ok', data=no_read))
+
+'''
+健康宣教 获取列表
+
+如果有from参数
+    则从from开始的所有
+如果没有from参数
+    获取最新的20条
+'''
+# TODO 是否需要验证呢？
+
+@api_view(['GET'])
+def knowledge_list(request):
+    try:
+        token = request.GET['t']
+    except KeyError:
+        return Response({'status': 1, 'message': 'token值不存在'})
+
+    token_data = tokenParse(token)
+
+    if not token_data:
+        return Response({'status': 1, 'message': 'token值不正确'})
+
+    uid = token_data['id']
+
+    try:
+        user = User.objects.get(pk=uid)
+    except User.DoesNotExist:
+        return Response(dict(status=1, message='token解析不出来'))
+
+    from_str = request.GET.get('from',0)
+
+    if from_str == 0:
+        # 没有from参数 一般是第一次获取 返回最近10天的知识
+        from_time = date.today()-timedelta(days=10)
+    else:
+        try:
+            from_time = datetime.strptime(from_str, '%Y-%m-%d %H:%M:%S')
+        except ValueError:
+            return Response(dict(status=1, message='from参数转为日期格式失败，格式必须是 yyyy-mm-dd HH:mm:ss'))
+
+    knowledgelist = Knowledge.objects.filter(create_time__gte=from_time).order_by('-create_time')
+
+    result_data = []
+    for knowledge_item in knowledgelist:
+        #前100个字符
+        knowledge_item.content = knowledge_item.content[0:100]
+        knowledge_item_serializer = KnowledgeSerializer(knowledge_item)
+
+        #获取类型对象 可能多个嘛
+        knowledge_item_types = knowledge_item.types.all()
+        knowledge_type_data = []
+        for knowledge_item_type in knowledge_item_types:
+            knowledge_type_data.append(KnowledgeTypeSerializer(knowledge_item_type).data)
+
+        result_data.append(dict(knowledge=knowledge_item_serializer.data, types=knowledge_type_data))
+
+    return Response(dict(status=0, message='ok', data=result_data))
+
+
+'''
+健康宣教 获取列表 某个类型的知识
+'''
+# TODO 是否需要验证呢？
+
+@api_view(['GET'])
+def knowledge_type_list(request):
+    try:
+        token = request.GET['t']
+    except KeyError:
+        return Response({'status': 1, 'message': 'token值不存在'})
+
+    token_data = tokenParse(token)
+
+    if not token_data:
+        return Response({'status': 1, 'message': 'token值不正确'})
+
+    uid = token_data['id']
+
+    try:
+        user = User.objects.get(pk=uid)
+    except User.DoesNotExist:
+        return Response(dict(status=1, message='token解析不出来'))
+
+    l_type = request.GET.get('type',0)
+    if l_type == 0:
+        return Response(dict(status=1, message='type参数是必须的，且必须是Int类型'))
+    l_type = int(l_type)
+    if type(l_type) != int:
+        return Response(dict(status=1, message='type参数必须是Int类型'))
+
+    page = request.GET.get('page',1)
+    page = int(page)
+    if page < 1:
+        page = 1;
+
+    if type(page) != int:
+        return Response(dict(status=1, message='page参数是必须的，必须是Int类型'))
+
+    pagesize = 20
+    index_begin = (page-1)*20
+    index_end = index_begin+20
+
+    knowledge_type = KnowledgeType.objects.get(id=l_type)
+    if not knowledge_type:
+        return Response(dict(status=1, message='type参数:'+l_type+'，对应的类型不存在'))
+
+    knowledgelist = knowledge_type.knowledge_set.all().order_by('-create_time')[index_begin:index_end]
+
+    result_data = []
+    for knowledge_item in knowledgelist:
+        #前100个字符
+        knowledge_item.content = knowledge_item.content[0:100]
+        knowledge_item_serializer = KnowledgeSerializer(knowledge_item)
+
+        result_data.append(knowledge_item_serializer.data)
+
+    return Response(dict(status=0, message='ok', data=result_data))
+
+
+'''
+健康宣教 获取明细
+
+'''
+# TODO 是否需要验证呢？
+
+@api_view(['GET'])
+def knowledge_detail(request):
+    try:
+        token = request.GET['t']
+    except KeyError:
+        return Response({'status': 1, 'message': 'token值不存在'})
+
+    token_data = tokenParse(token)
+
+    if not token_data:
+        return Response({'status': 1, 'message': 'token值不正确'})
+
+    uid = token_data['id']
+
+    try:
+        user = User.objects.get(pk=uid)
+    except User.DoesNotExist:
+        return Response(dict(status=1, message='token解析不出来'))
+
+    id = request.GET.get('id',0)
+
+    if id == 0:
+        # 必须得有id参数
+        return Response(dict(status=1, message='id参数不能为空'))
+    else:
+        knowledge_item = Knowledge.objects.get(pk=id)
+
+        knowledge_item.read_count+=1
+        knowledge_serializer = KnowledgeSerializer(knowledge_item)
+
+        #获取类型对象 可能多个嘛
+        knowledge_types = knowledge_item.types.all()
+        knowledge_type_data = []
+        for knowledge_type in knowledge_types:
+            knowledge_type_data.append(KnowledgeTypeSerializer(knowledge_type).data)
+
+        knowledge_item.save()
+        return Response(dict(status=0, message='ok', data=(dict(knowledge=knowledge_serializer.data, types=knowledge_type_data))))

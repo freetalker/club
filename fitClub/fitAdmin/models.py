@@ -236,6 +236,28 @@ class SportDetail(models.Model):
     def __unicode__(self):
         return self.user.loginname
 
+#健康宣教 分类
+class KnowledgeType(models.Model):
+    name = models.CharField(max_length=20)
+    hot_count = models.IntegerField(default=0)
+
+    def __unicode__(self):
+        return self.name
+
+#健康宣教 内容
+class Knowledge(models.Model):
+    title = models.CharField(max_length=100)
+    content = models.TextField(max_length=20000)
+    cover_path = models.ImageField(upload_to='./covers/',null=True)
+    types = models.ManyToManyField(KnowledgeType)
+    read_count = models.IntegerField(default=0)
+    author = models.CharField(max_length=20)
+    user = models.ForeignKey(User,db_column ="create_by")
+    create_time = models.DateTimeField(default=timezone.now)
+
+    def __unicode__(self):
+        return self.title
+
 #提醒设置
 class Alarm(models.Model):
     type_id = models.IntegerField(choices=alarm_type_choices)
@@ -256,7 +278,7 @@ class Product(models.Model):
 #商品图片
 class ProductPicture(models.Model):
     product = models.ForeignKey(Product)
-    pic_path = models.FilePathField(path="/media/pro_img/")
+    pic_path = models.ImageField(upload_to='./products/',null=True)
     seq = models.IntegerField()
     is_delete = models.BooleanField(default=False)
 
