@@ -12,6 +12,7 @@ urlpatterns = [
     url(r'^api/sport/stat/$',views.sport_stat),
     url(r'^api/sport/date/$',views.sport_date),
     url(r'^api/sport/rank/$',views.sport_rank),
+    url(r'^api/sport/detail/$',views.sport_detail),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

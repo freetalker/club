@@ -2,9 +2,7 @@
 from datetime import datetime
 import logging
 from django.core.exceptions import FieldError
-from django.db.models import Q
 from django.utils.timezone import now
-from django.views.decorators.csrf import csrf_exempt
 
 from rest_framework import status
 from rest_framework.decorators import api_view
@@ -12,9 +10,9 @@ from rest_framework.response import Response
 
 from base.security import *
 
-from fitAdmin.models import User, SportConf,SportDate,SportStat
+from fitAdmin.models import User, SportConf,SportDate,SportStat,SportDetail
 from fitApi.serializers import UserSerializer, AvatarSerializer, SportConfSerializer, SportStatSerializer, \
-    SportDateSerializer, UserBriefSerializer
+    SportDateSerializer,SportDetailSerializer, UserBriefSerializer
 
 
 @api_view(['GET', 'POST'])
@@ -33,7 +31,7 @@ def user_list(request, format=None):
 
 
 @api_view(['GET', 'PUT', 'DELETE'])
-def user_detail(request, pk, format=None):
+def user_detail(request, pk):
     try:
         user = User.objects.get(pk=pk)
     except User.DoesNotExist:
@@ -56,7 +54,7 @@ def user_detail(request, pk, format=None):
 
 
 @api_view(['POST'])
-def user_login(request, format=None):
+def user_login(request):
     if request.method == 'GET':
         return Response(status=status.HTTP_403_FORBIDDEN)
 
@@ -118,7 +116,7 @@ def user_login(request, format=None):
 
                 return Response({'status': 1, 'message': '登录成功', 'data': token})
 
-@api_view(['GET','POST'])
+@api_view(['GET', 'POST'])
 def user_profile(request):
     try:
         token = request.GET['t']
@@ -368,7 +366,7 @@ def sport_date(request):
 
         if not end: #有to参数，转为日期
             try:
-                end = datetime.strptime(start_str,'%Y-%m-%d').date()
+                end = datetime.strptime(end_str,'%Y-%m-%d').date()
             except ValueError:
                 return Response(dict(status=1, message = 'to参数转为日期格式失败'))
 
@@ -385,7 +383,11 @@ def sport_date(request):
     return Response(dict(status=0,message='ok',data=result_data))
 
 
-
+'''
+获取运动排名
+t：token
+type：排名类型 steps,points,distances,calories
+'''
 @api_view(['GET'])
 def sport_rank(request):
     try:
@@ -414,7 +416,7 @@ def sport_rank(request):
         rank_type = 'steps'
 
     try:
-        sportRanks = SportDate.objects.filter(sport_date__exact = today).order_by('-'+rank_type)[0:10];
+        sportRanks = SportDate.objects.filter(sport_date__exact=today).order_by('-'+rank_type)[0:10];
 
         result_date = []
         rank = 1
@@ -429,3 +431,76 @@ def sport_rank(request):
         return Response(dict(status=1, message='排序字段只能是：steps,points,distances,calories'))
     except:
         return Response(dict(status=1, message='获取排名发生异常，请重试'))
+
+
+'''
+获取个人运动明细
+t：token
+type： steps,points,distances,calories
+'''
+@api_view(['GET'])
+def sport_detail(request):
+    try:
+        token = request.GET['t']
+    except KeyError:
+        return Response({'status': 1, 'message': 'token值不存在'})
+
+    token_data = tokenParse(token)
+
+    if not token_data:
+        return Response({'status': 1, 'message': 'token值不正确'})
+
+    uid = token_data['id']
+
+    try:
+        user = User.objects.get(pk=uid)
+    except User.DoesNotExist:
+        return Response(dict(status=1, message='token解析不出来'))
+
+    sport_details = []
+    try:
+        start_str = request.GET['from']
+    except KeyError:
+        # 如果from参数为空，to也无用，默认返回今天的所有运动数据
+
+        today_begin = time.strftime('%Y-%m-%d 0:0:0',time.localtime(time.time()))
+        sport_details = user.sportdetail_set.filter(create_time__gte=today_begin).order_by('create_time')
+
+        if not sport_details:
+            # 没有今天的数据，则返回失败
+            return Response(dict(status=1, message='今天还没开始运动'))
+
+    # 说明form存在
+    if not sport_details:
+        try:
+            start = datetime.strptime(start_str+' 0:0:0','%Y-%m-%d %H:%M:%S')
+        except ValueError:
+            return Response(dict(status=1, message='from参数转为日期格式失败'))
+
+        try:
+            end_str = request.GET['to']
+        except KeyError:
+            # 如果没有to参数，则默认到现在
+            end = datetime.now()
+            end_str = end.strftime("%Y-%m-%d")
+
+        if not end: #有to参数，转为日期
+            try:
+                end = datetime.strptime(end_str+' 23:59:59','%Y-%m-%d %H:%M:%S')
+            except ValueError:
+                return Response(dict(status=1, message='to参数转为日期格式失败'))
+
+        if start > end:
+            return Response(dict(status=1, message='开始时间: '+str(start_str)+' 大于 结束时间: '+str(end_str)+' ，请确保时间段正确'))
+
+        sport_details = user.sportdetail_set.filter(create_time__range=(start,end)).order_by('create_time')
+
+    if not sport_details:
+        return Response(dict(status=1, message='时间段 '+str(start_str)+' 至 '+str(end_str)+' 没有运动数据，请确保时间段正确'))
+
+    result_data = []
+    for sport__detail in sport_details:
+        detail_serializer = SportDetailSerializer(sport__detail)
+        result_data.append(detail_serializer.data)
+
+    return Response(dict(status=0, message='ok', data=result_data))

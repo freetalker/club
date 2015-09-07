@@ -50,3 +50,9 @@ class SportDateSerializer(serializers.ModelSerializer):
     class Meta:
         model = SportDate
         fields = ('points','steps','distances','calories','last_time','sport_date')
+
+class SportDetailSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = SportDetail
+        fields = ('create_time','end_time','duration','type','points','steps','calories','distances')

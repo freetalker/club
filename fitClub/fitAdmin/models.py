@@ -224,20 +224,23 @@ class SportConf(models.Model):
 # 运动明细
 class SportDetail(models.Model):
     user = models.ForeignKey(User)
-    create_time = models.DateTimeField()
-    end_time = models.DateTimeField()
+    create_time = models.DateTimeField(default=timezone.now)
+    end_time = models.DateTimeField(default=timezone.now)
     duration = models.IntegerField(null=True)
     type = models.CharField(max_length=20, null=True)
     points = models.IntegerField(null=True)
     steps = models.IntegerField(null=True)
     calories = models.FloatField(max_length=9, null=True)
-    distance = models.FloatField(max_length=9)
+    distances = models.FloatField(max_length=9)
+
+    def __unicode__(self):
+        return self.user.loginname
 
 #提醒设置
 class Alarm(models.Model):
     type_id = models.IntegerField(choices=alarm_type_choices)
     critical = models.IntegerField()
-    alarm_time = models.TimeField()
+    alarm_time = models.TimeField(default='22:00:00')
     alarm_channel = models.IntegerField(choices=alarm_channel_choices)
 
 #商品
