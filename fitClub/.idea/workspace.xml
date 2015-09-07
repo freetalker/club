@@ -1,15 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="1edfd412-1fd6-4d63-9699-f630f30c2de1" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/fitClub.sqlite3" afterPath="$PROJECT_DIR$/fitClub.sqlite3" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/fitAdmin/admin.py" afterPath="$PROJECT_DIR$/fitAdmin/admin.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/fitAdmin/models.py" afterPath="$PROJECT_DIR$/fitAdmin/models.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/fitApi/serializers.py" afterPath="$PROJECT_DIR$/fitApi/serializers.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/fitApi/urls.py" afterPath="$PROJECT_DIR$/fitApi/urls.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/fitApi/views.py" afterPath="$PROJECT_DIR$/fitApi/views.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-    </list>
+    <list default="true" id="1edfd412-1fd6-4d63-9699-f630f30c2de1" name="Default" comment="" />
     <ignored path="fitClub.iws" />
     <ignored path=".idea/workspace.xml" />
     <ignored path=".idea/dataSources.local.xml" />
@@ -670,7 +662,7 @@
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.29470673" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3064972" sideWeight="0.47711015" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3064972" sideWeight="0.47711015" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32768363" sideWeight="0.48569384" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32485875" sideWeight="0.4914163" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
