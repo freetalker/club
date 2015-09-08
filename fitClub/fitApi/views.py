@@ -789,6 +789,8 @@ def product_list(request):
         product_item_picture = product_item.productpicture_set.order_by('seq').first()
         if product_item_picture:
             product_item.picture = product_item_picture.pic_path
+        else:
+            product_item.picture = ''
         product_item_serializer = ProductBriefSerializer(product_item)
 
         result_data.append(product_item_serializer.data)

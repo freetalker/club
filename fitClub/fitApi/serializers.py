@@ -72,14 +72,14 @@ class KnowledgeTypeSerializer(serializers.ModelSerializer):
         fields = ('id','name',)
 
 class ProductBriefSerializer(serializers.ModelSerializer):
-    picture = serializers.ImageField()
+    picture = serializers.ImageField(allow_null=True)
 
     class Meta:
         model = Product
         fields = ('id','name','price','unit','discount','create_time','cell_count','picture')
 
 class ProductSerializer(serializers.ModelSerializer):
-    pictures = serializers.ListField()
+    pictures = serializers.ListField(allow_null=True)
     class Meta:
         model = Product
         fields = ('id','name','desc','price','unit','discount','create_time','cell_count','pictures')
