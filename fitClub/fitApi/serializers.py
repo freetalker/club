@@ -3,6 +3,8 @@
 from rest_framework import serializers
 from fitAdmin.models import *
 
+#required all_null都是为了post的时候可以不传值
+
 class UserSerializer(serializers.ModelSerializer):
     nickname = serializers.CharField(allow_null=True, required=False)
     realname = serializers.CharField(allow_null=True, required=False)
@@ -68,4 +70,25 @@ class KnowledgeTypeSerializer(serializers.ModelSerializer):
     class Meta:
         model = KnowledgeType
         fields = ('id','name',)
+
+class ProductBriefSerializer(serializers.ModelSerializer):
+    picture = serializers.ImageField()
+
+    class Meta:
+        model = Product
+        fields = ('id','name','price','unit','discount','create_time','cell_count','picture')
+
+class ProductSerializer(serializers.ModelSerializer):
+    pictures = serializers.ListField()
+    class Meta:
+        model = Product
+        fields = ('id','name','desc','price','unit','discount','create_time','cell_count','pictures')
+
+class ProductPictureSerializer(serializers.ModelSerializer):
+    picture = serializers.ImageField(source='pic_path')
+
+    class Meta:
+        model = Product
+        fields = ('picture',)
+
 

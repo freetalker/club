@@ -273,7 +273,12 @@ class Product(models.Model):
     unit = models.CharField(max_length=10)
     create_time = models.DateTimeField(default=timezone.now)
     discount = models.FloatField()
+    cell_count = models.IntegerField(default=0)
+    read_count = models.IntegerField(default=0)
     is_delete = models.BooleanField(default=False)
+
+    def __unicode__(self):
+        return self.name
 
 #商品图片
 class ProductPicture(models.Model):
@@ -281,6 +286,9 @@ class ProductPicture(models.Model):
     pic_path = models.ImageField(upload_to='./products/',null=True)
     seq = models.IntegerField()
     is_delete = models.BooleanField(default=False)
+
+    def __unicode__(self):
+        return self.product.name+str(self.seq)
 
 #订单
 class Order(models.Model):

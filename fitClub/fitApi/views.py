@@ -10,9 +10,8 @@ from rest_framework.response import Response
 
 from base.security import *
 
-from fitAdmin.models import User, SportConf, SportDate, SportStat, SportDetail,Knowledge,KnowledgeType
-from fitApi.serializers import UserSerializer, AvatarSerializer, SportConfSerializer, SportStatSerializer, \
-    SportDateSerializer, SportDetailSerializer, UserBriefSerializer,KnowledgeSerializer,KnowledgeTypeSerializer
+from fitAdmin.models import User, SportConf, SportDate, SportStat, SportDetail,Knowledge,KnowledgeType,Product,ProductPicture
+from fitApi.serializers import *
 
 
 @api_view(['GET', 'POST'])
@@ -530,12 +529,12 @@ def knowledge_new_count(request):
     if not token_data:
         return Response({'status': 1, 'message': 'token值不正确'})
 
-    uid = token_data['id']
-
-    try:
-        user = User.objects.get(pk=uid)
-    except User.DoesNotExist:
-        return Response(dict(status=1, message='token解析不出来'))
+    # uid = token_data['id']
+    #
+    # try:
+    #     user = User.objects.get(pk=uid)
+    # except User.DoesNotExist:
+    #     return Response(dict(status=1, message='token解析不出来'))
 
     new_count = 0
     from_str = request.GET.get('from',1)
@@ -575,12 +574,12 @@ def knowledge_list(request):
     if not token_data:
         return Response({'status': 1, 'message': 'token值不正确'})
 
-    uid = token_data['id']
-
-    try:
-        user = User.objects.get(pk=uid)
-    except User.DoesNotExist:
-        return Response(dict(status=1, message='token解析不出来'))
+    # uid = token_data['id']
+    #
+    # try:
+    #     user = User.objects.get(pk=uid)
+    # except User.DoesNotExist:
+    #     return Response(dict(status=1, message='token解析不出来'))
 
     from_str = request.GET.get('from',0)
 
@@ -629,12 +628,12 @@ def knowledge_type_list(request):
     if not token_data:
         return Response({'status': 1, 'message': 'token值不正确'})
 
-    uid = token_data['id']
-
-    try:
-        user = User.objects.get(pk=uid)
-    except User.DoesNotExist:
-        return Response(dict(status=1, message='token解析不出来'))
+    # uid = token_data['id']
+    #
+    # try:
+    #     user = User.objects.get(pk=uid)
+    # except User.DoesNotExist:
+    #     return Response(dict(status=1, message='token解析不出来'))
 
     l_type = request.GET.get('type',0)
     if l_type == 0:
@@ -651,7 +650,6 @@ def knowledge_type_list(request):
     if type(page) != int:
         return Response(dict(status=1, message='page参数是必须的，必须是Int类型'))
 
-    pagesize = 20
     index_begin = (page-1)*20
     index_end = index_begin+20
 
@@ -690,12 +688,12 @@ def knowledge_detail(request):
     if not token_data:
         return Response({'status': 1, 'message': 'token值不正确'})
 
-    uid = token_data['id']
-
-    try:
-        user = User.objects.get(pk=uid)
-    except User.DoesNotExist:
-        return Response(dict(status=1, message='token解析不出来'))
+    # uid = token_data['id']
+    #
+    # try:
+    #     user = User.objects.get(pk=uid)
+    # except User.DoesNotExist:
+    #     return Response(dict(status=1, message='token解析不出来'))
 
     id = request.GET.get('id',0)
 
@@ -716,3 +714,133 @@ def knowledge_detail(request):
 
         knowledge_item.save()
         return Response(dict(status=0, message='ok', data=(dict(knowledge=knowledge_serializer.data, types=knowledge_type_data))))
+
+
+'''
+获取商品列表
+    没有具体验证是某个人来获取的
+    pz 每页获取的大小 默认20
+    page 页数 数字
+    order 排序字段 price：价格  new：新鲜程度（默认）  discount：折扣
+    ot 排序类型 1：顺序（默认）  0：逆序
+    key 查询关键字
+'''
+@api_view(['GET'])
+def product_list(request):
+    try:
+        token = request.GET['t']
+    except KeyError:
+        return Response({'status': 1, 'message': 'token值不存在'})
+
+    token_data = tokenParse(token)
+
+    if not token_data:
+        return Response({'status': 1, 'message': 'token值不正确'})
+
+    # uid = token_data['id']
+    #
+    # try:
+    #     user = User.objects.get(pk=uid)
+    # except User.DoesNotExist:
+    #     return Response(dict(status=1, message='token解析不出来'))
+
+    #如果没有默认20，如果是非数字 默认20
+    pz = request.GET.get('pz',20)
+    pagesize = int(pz)
+    if type(pagesize) != int:
+      pagesize = 20
+
+    #
+    page = request.GET.get('page', 1)
+    page = int(page)
+    if page < 1:
+        page = 1
+
+    index_begin = (page-1)*pagesize
+    index_end = index_begin+pagesize
+
+    if type(page) != int:
+        return Response(dict(status=1, message='page参数必须是Int类型'))
+
+    order_str = ""
+    order_type = request.GET.get('ot', "1")
+    if order_type == "0":
+        order_str = "-"
+
+    order_field = request.GET.get('order', 'create_time')
+
+    order_fields = ["create_time", "discount", "price", "cell_count"]
+    if order_field not in order_fields:
+        return Response(dict(status=1, message='order参数不正确'))
+
+    order_str += order_field
+
+    key = request.GET.get('key','')
+
+    product_data = []
+    if key:
+        #此处不能用 contains，因为要支持中文嘛 'contains': 'LIKE BINARY %s', 'icontains': 'LIKE %s'
+        product_data = Product.objects.filter(is_delete=0).filter(name__icontains=key).order_by(order_str)[index_begin:index_end]
+    else:
+        product_data = Product.objects.filter(is_delete=0).order_by(order_str)[index_begin:index_end]
+
+    result_data = []
+    for product_item in product_data:
+        product_item_picture = product_item.productpicture_set.order_by('seq').first()
+        if product_item_picture:
+            product_item.picture = product_item_picture.pic_path
+        product_item_serializer = ProductBriefSerializer(product_item)
+
+        result_data.append(product_item_serializer.data)
+
+    return Response(dict(status=0, message='ok', data=result_data))
+
+
+'''
+获取某个商品的明细
+    没有具体验证是某个人来获取的
+    id 商品的id
+'''
+@api_view(['GET'])
+def product_detail(request):
+    try:
+        token = request.GET['t']
+    except KeyError:
+        return Response({'status': 1, 'message': 'token值不存在'})
+
+    token_data = tokenParse(token)
+
+    if not token_data:
+        return Response({'status': 1, 'message': 'token值不正确'})
+
+    # uid = token_data['id']
+    #
+    # try:
+    #     user = User.objects.get(pk=uid)
+    # except User.DoesNotExist:
+    #     return Response(dict(status=1, message='token解析不出来'))
+
+    id = request.GET.get('id',0)
+
+    if id == 0:
+        # 必须得有id参数
+        return Response(dict(status=1, message='id参数不能为空'))
+    else:
+        product_item = Product.objects.get(pk=id)
+
+        product_item.read_count+=1
+
+        #获取类型对象 可能多个嘛
+        product_pics = product_item.productpicture_set.filter(is_delete=0)
+        product_pics_data = []
+        for product_pic in product_pics:
+            #直接获取pic_path 没有把/media父级文件夹名称加上，所以还是序列化下吧
+            product_pics_data.append(ProductPictureSerializer(product_pic).data.get('picture'))
+
+        product_item.pictures = product_pics_data
+        product_serializer = ProductSerializer(product_item)
+
+        #保存查看+1
+        product_item.save()
+        return Response(dict(status=0, message='ok', data=product_serializer.data))
+
