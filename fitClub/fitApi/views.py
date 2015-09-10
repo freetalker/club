@@ -786,12 +786,12 @@ def product_list(request):
 
     result_data = []
     for product_item in product_data:
-        product_item_picture = product_item.productpicture_set.order_by('seq').first()
+        product_item_picture = product_item.productpicture_set.filter(is_delete=0).order_by('seq').first()
         if product_item_picture:
             product_item.picture = product_item_picture.pic_path
         else:
-            #第一个是默认图片 需要初始化
-            product_item.picture = ProductPicture.objects.get(pk=1)
+            #第一个是默认图片 需要初始化 必须保证第一个有哦
+            product_item.picture = ProductPicture.objects.get(pk=1).pic_path
         product_item_serializer = ProductBriefSerializer(product_item)
 
         result_data.append(product_item_serializer.data)
@@ -829,7 +829,10 @@ def product_detail(request):
         # 必须得有id参数
         return Response(dict(status=1, message='id参数不能为空'))
     else:
-        product_item = Product.objects.get(pk=id)
+        try:
+            product_item = Product.objects.get(pk=id)
+        except Product.DoesNotExist:
+            return Response(dict(status=1, message='id '+str(id)+' 对应的商品不存在'))
 
         product_item.read_count+=1
 
@@ -879,8 +882,6 @@ def order_buy(request):
     if request.method == 'GET':
         try:
             order = user.order_set.get(pk=1)
-            if not order:
-                return Response(dict(status=1, message='没有该订单'))
 
             order_details = order.orderdetail_set.all()
 
@@ -890,6 +891,8 @@ def order_buy(request):
                 result_data.append(order_detail_serializer.data)
 
             return Response(result_data)
+        except Order.DoesNotExist:
+            return Response(dict(status=1, message='订单不存在'))
         except SportConf.DoesNotExist:
             return Response(dict(status=1, message='未设置目标'))
 
@@ -979,7 +982,7 @@ def order_list(request):
 
         order_product_data = []
         for order_detail in order_details:
-            product_pic = order_detail.product.productpicture_set.first()
+            product_pic = order_detail.product.productpicture_set.filter(is_delete=0).order_by("seq").first()
             if not product_pic:
                 # 数据库第一个存的是没有默认图片
                 product_pic = ProductPicture.objects.get(pk=1)
@@ -1034,13 +1037,16 @@ def order_detail(request):
         # 必须得有id参数
         return Response(dict(status=1, message='id参数不能为空'))
     else:
-        order_item = Order.objects.get(pk=id)
+        try:
+            order_item = Order.objects.get(pk=id)
+        except Order.DoesNotExist:
+            return Response(dict(status=1, message='id '+str(id)+' 对应的订单不存在'))
 
         #获取订单的商品明细
         order_details = order_item.orderdetail_set.all().order_by('product_id')
         order_product_data = []
         for order_detail in order_details:
-            product_pic = order_detail.product.productpicture_set.first()
+            product_pic = order_detail.product.productpicture_set.filter(is_delete=0).order_by("seq").first()
             if not product_pic:
                 # 数据库第一个存的是没有默认图片
                 product_pic = ProductPicture.objects.get(pk=1)
