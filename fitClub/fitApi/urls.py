@@ -19,6 +19,9 @@ urlpatterns = [
     url(r'^api/knowledge/detail/$',views.knowledge_detail),
     url(r'^api/product/list/$',views.product_list),
     url(r'^api/product/detail/$',views.product_detail),
+    url(r'^api/order/buy/$',views.order_buy),
+    url(r'^api/order/list/$',views.order_list),
+    url(r'^api/order/detail/$',views.order_detail),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

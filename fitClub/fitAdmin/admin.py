@@ -21,6 +21,7 @@ admin.site.register(ProductPicture)
 
 admin.site.register(Order)
 admin.site.register(OrderDetail)
+admin.site.register(OrderOperLog)
 
 admin.site.register(SportDate)
 admin.site.register(SportConf)

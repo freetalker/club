@@ -298,6 +298,9 @@ class Order(models.Model):
     user = models.ForeignKey(User,db_column ="create_by")
     create_time = models.DateTimeField(default=timezone.now)
 
+    def __unicode__(self):
+        return self.user.realname+' '+self.order_code
+
 #订单明细
 class OrderDetail(models.Model):
     order = models.ForeignKey(Order)
@@ -306,3 +309,15 @@ class OrderDetail(models.Model):
     product_price = models.FloatField()
     number = models.FloatField()
     total = models.FloatField()
+
+    def __unicode__(self):
+        return self.order.__unicode__()+self.product.name
+
+class OrderOperLog(models.Model):
+    order = models.ForeignKey(Order)
+    action = models.CharField(max_length=200)
+    actor = models.ForeignKey(User,db_column ="create_by")
+    action_time = models.DateTimeField(default=timezone.now)
+
+    def __unicode__(self):
+        return self.actor.realname+' '+self.action

@@ -1,5 +1,5 @@
 # coding=utf-8
-from datetime import datetime, timedelta, date
+from datetime import timedelta, date
 import logging
 from django.core.exceptions import FieldError
 from django.utils.timezone import now
@@ -356,7 +356,7 @@ def sport_date(request):
     # 如果sportDates 没有数据，则表示存在 from 字段
     if not sportDates:
         try:
-            start = datetime.strptime(start_str, '%Y-%m-%d').date()
+            start = datetime.datetime.strptime(start_str, '%Y-%m-%d')
         except ValueError:
             return Response(dict(status=1, message='from参数转为日期格式失败'))
 
@@ -369,7 +369,7 @@ def sport_date(request):
 
         if not end:  # 有to参数，转为日期
             try:
-                end = datetime.strptime(end_str, '%Y-%m-%d').date()
+                end = datetime.datetime.strptime(end_str, '%Y-%m-%d').date()
             except ValueError:
                 return Response(dict(status=1, message='to参数转为日期格式失败'))
 
@@ -478,7 +478,7 @@ def sport_detail(request):
     # 说明form存在
     if not sport_details:
         try:
-            start = datetime.strptime(start_str + ' 0:0:0', '%Y-%m-%d %H:%M:%S')
+            start = datetime.datetime.strptime(start_str + ' 0:0:0', '%Y-%m-%d %H:%M:%S')
         except ValueError:
             return Response(dict(status=1, message='from参数转为日期格式失败'))
 
@@ -491,7 +491,7 @@ def sport_detail(request):
 
         if not end:  # 有to参数，转为日期
             try:
-                end = datetime.strptime(end_str + ' 23:59:59', '%Y-%m-%d %H:%M:%S')
+                end = datetime.datetime.strptime(end_str + ' 23:59:59', '%Y-%m-%d %H:%M:%S')
             except ValueError:
                 return Response(dict(status=1, message='to参数转为日期格式失败'))
 
@@ -544,7 +544,7 @@ def knowledge_new_count(request):
         return Response(dict(status=1, message='from参数不能为空，必须是日期格式，格式必须是 yyyy-mm-dd HH:mm:ss'))
 
     try:
-        from_time = datetime.strptime(from_str, '%Y-%m-%d %H:%M:%S')
+        from_time = datetime.datetime.strptime(from_str, '%Y-%m-%d %H:%M:%S')
     except ValueError:
         return Response(dict(status=1, message='from参数转为日期格式失败，格式必须是 yyyy-mm-dd HH:mm:ss'))
 
@@ -588,7 +588,7 @@ def knowledge_list(request):
         from_time = date.today()-timedelta(days=10)
     else:
         try:
-            from_time = datetime.strptime(from_str, '%Y-%m-%d %H:%M:%S')
+            from_time = datetime.datetime.strptime(from_str, '%Y-%m-%d %H:%M:%S')
         except ValueError:
             return Response(dict(status=1, message='from参数转为日期格式失败，格式必须是 yyyy-mm-dd HH:mm:ss'))
 
@@ -790,7 +790,8 @@ def product_list(request):
         if product_item_picture:
             product_item.picture = product_item_picture.pic_path
         else:
-            product_item.picture = ''
+            #第一个是默认图片 需要初始化
+            product_item.picture = ProductPicture.objects.get(pk=1)
         product_item_serializer = ProductBriefSerializer(product_item)
 
         result_data.append(product_item_serializer.data)
@@ -833,10 +834,15 @@ def product_detail(request):
         product_item.read_count+=1
 
         #获取类型对象 可能多个嘛
-        product_pics = product_item.productpicture_set.filter(is_delete=0)
+        product_pics = product_item.productpicture_set.filter(is_delete=0).order_by("seq")
         product_pics_data = []
         for product_pic in product_pics:
             #直接获取pic_path 没有把/media父级文件夹名称加上，所以还是序列化下吧
+            product_pics_data.append(ProductPictureSerializer(product_pic).data.get('picture'))
+
+        if not product_pics_data:
+            # 数据库第一个存的是没有默认图片
+            product_pic = ProductPicture.objects.get(pk=1)
             product_pics_data.append(ProductPictureSerializer(product_pic).data.get('picture'))
 
         product_item.pictures = product_pics_data
@@ -845,4 +851,227 @@ def product_detail(request):
         #保存查看+1
         product_item.save()
         return Response(dict(status=0, message='ok', data=product_serializer.data))
+
+'''
+    提交订单
+        [{product_id,order_price,number,total}]
+'''
+# TODO 待开发
+@api_view(['GET','POST'])
+def order_buy(request):
+    try:
+        token = request.GET['t']
+    except KeyError:
+        return Response({'status': 1, 'message': 'token值不存在'})
+
+    token_data = tokenParse(token)
+
+    if not token_data:
+        return Response({'status': 1, 'message': 'token值不正确'})
+
+    uid = token_data['id']
+
+    try:
+        user = User.objects.get(pk=uid)
+    except User.DoesNotExist:
+        return Response(dict(status=1, message='token解析不出来'))
+
+    if request.method == 'GET':
+        try:
+            order = user.order_set.get(pk=1)
+            if not order:
+                return Response(dict(status=1, message='没有该订单'))
+
+            order_details = order.orderdetail_set.all()
+
+            result_data = []
+            for order_detail in order_details:
+                order_detail_serializer = OrderBuySerializer(order_detail)
+                result_data.append(order_detail_serializer.data)
+
+            return Response(result_data)
+        except SportConf.DoesNotExist:
+            return Response(dict(status=1, message='未设置目标'))
+
+    elif request.method == 'POST':
+        try:
+            sportConf = user.sportconf
+        except SportConf.DoesNotExist:
+            user.sportconf = SportConf()
+            sportConf = user.sportconf
+
+        try:
+            serializer = SportConfSerializer(sportConf, data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(dict(status=0, message='ok', data=serializer.data))
+
+            return Response(dict(status=1, message=serializer.errors))
+        except Exception as exc:
+            return Response(dict(status=1, message=exc.detail))
+
+
+'''
+查询订单列表
+    pz 每页获取的大小 默认20
+    page 页数 数字
+
+    默认订单创建日期按照日期从新到旧
+
+    from 查询开始日期
+    to 查询结束日期
+'''
+@api_view(['GET'])
+def order_list(request):
+    try:
+        token = request.GET['t']
+    except KeyError:
+        return Response({'status': 1, 'message': 'token值不存在'})
+
+    token_data = tokenParse(token)
+
+    if not token_data:
+        return Response({'status': 1, 'message': 'token值不正确'})
+
+    uid = token_data['id']
+
+    try:
+        user = User.objects.get(pk=uid)
+    except User.DoesNotExist:
+        return Response(dict(status=1, message='token解析不出来'))
+
+    #如果没有默认20，如果是非数字 默认20
+    pz = request.GET.get('pz',20)
+    pagesize = int(pz)
+    if type(pagesize) != int:
+      pagesize = 20
+
+    page = request.GET.get('page', 1)
+    page = int(page)
+    if page < 1:
+        page = 1
+
+    index_begin = (page-1)*pagesize
+    index_end = index_begin+pagesize
+
+    start_str = request.GET.get('from','0')
+    end_str = request.GET.get('to','0')
+
+    #即没有查询条件
+    if start_str+end_str == '00':
+        orderList = user.order_set.all().order_by('-create_time')[index_begin:index_end]
+    else:
+        try:
+            start = datetime.datetime.strptime(start_str, '%Y-%m-%d')
+            end = datetime.datetime.strptime(end_str, '%Y-%m-%d')
+        except ValueError:
+            return Response(dict(status=1, message='from 或 to 参数转为日期格式失败，必须是形如: 2015-09-11 01:40:00'))
+
+        orderList = user.order_set.filter(create_time__range=(start, end)).order_by('-create_time')[index_begin:index_end]
+
+    # 处理订单列表 把订单的明细也要一起传回去
+    # TODO 此处没有考虑 已卖出商品的 历史记录，以后再考虑吧
+    # 也没有考虑订单商品对象 和 原始对象的不同 直接把orderDetail扩展了几个字段
+
+    result_data = []
+    for order in orderList:
+        order_details = order.orderdetail_set.all()
+
+        order_product_data = []
+        for order_detail in order_details:
+            product_pic = order_detail.product.productpicture_set.first()
+            if not product_pic:
+                # 数据库第一个存的是没有默认图片
+                product_pic = ProductPicture.objects.get(pk=1)
+            #图片
+            product_pic = ProductPictureSerializer(product_pic).data.get('picture')
+
+            #名称
+            product_name = order_detail.product.name
+
+            #订单里面的一个商品
+            order_product_serializer = dict(id=order_detail.product_id,name=product_name, picture=product_pic,\
+                                            number=order_detail.number,total = order_detail.total,\
+                                            order_price=order_detail.order_price,\
+                                            product_price=order_detail.order_price)
+
+            order_product_data.append(order_product_serializer)
+
+        order_status = order.get_status_display()
+        result_data.append(dict(id=order.id,code=order.order_code,total=order.total_pay,status=order_status,create_time=order.create_time,products=order_product_data))
+
+    return Response(dict(status=0,message='ok',data=result_data))
+
+
+'''
+查询订单详情
+    id 订单id
+
+    显示订单的处理流程 operLog
+'''
+@api_view(['GET'])
+def order_detail(request):
+    try:
+        token = request.GET['t']
+    except KeyError:
+        return Response({'status': 1, 'message': 'token值不存在'})
+
+    token_data = tokenParse(token)
+
+    if not token_data:
+        return Response({'status': 1, 'message': 'token值不正确'})
+
+    uid = token_data['id']
+
+    try:
+        user = User.objects.get(pk=uid)
+    except User.DoesNotExist:
+        return Response(dict(status=1, message='token解析不出来'))
+
+    id = request.GET.get('id',0)
+
+    if id == 0:
+        # 必须得有id参数
+        return Response(dict(status=1, message='id参数不能为空'))
+    else:
+        order_item = Order.objects.get(pk=id)
+
+        #获取订单的商品明细
+        order_details = order_item.orderdetail_set.all().order_by('product_id')
+        order_product_data = []
+        for order_detail in order_details:
+            product_pic = order_detail.product.productpicture_set.first()
+            if not product_pic:
+                # 数据库第一个存的是没有默认图片
+                product_pic = ProductPicture.objects.get(pk=1)
+            #图片
+            product_pic = ProductPictureSerializer(product_pic).data.get('picture')
+
+            #名称
+            product_name = order_detail.product.name
+
+            #订单里面的一个商品
+            order_product_serializer = dict(id=order_detail.product_id,name=product_name, picture=product_pic,\
+                                            number=order_detail.number,total = order_detail.total,\
+                                            order_price=order_detail.order_price,\
+                                            product_price=order_detail.order_price)
+
+            order_product_data.append(order_product_serializer)
+
+        #获取订单的操作明细
+        order_logs = order_item.orderoperlog_set.all().order_by("action_time")
+        order_logs_data = []
+        for order_log in order_logs:
+
+            order_log_item = dict(name=order_log.actor.realname,time = order_log.action_time,action=order_log.action)
+
+            order_logs_data.append(order_log_item)
+
+        order_status = order_item.get_status_display()
+
+        result_data = dict(id=order_item.id,code=order_item.order_code,total=order_item.total_pay,\
+                           status=order_status,create_time=order_item.create_time,products=order_product_data,logs=order_logs_data)
+    return Response(dict(status=0,message='ok',data=result_data))
+
+
 

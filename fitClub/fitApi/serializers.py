@@ -91,4 +91,11 @@ class ProductPictureSerializer(serializers.ModelSerializer):
         model = Product
         fields = ('picture',)
 
+class OrderBuySerializer(serializers.ModelSerializer):
+    product_id = serializers.IntegerField()
+
+    class Meta:
+        model = OrderDetail
+        fields = ('order_price','product_id','number','total',)
+
 
