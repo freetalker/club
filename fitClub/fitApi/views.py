@@ -1,6 +1,9 @@
 # coding=utf-8
-from datetime import timedelta, date
+from datetime import date
+import datetime
+
 import logging
+
 from django.core.exceptions import FieldError
 from django.utils.timezone import now
 
@@ -13,44 +16,44 @@ from base.security import *
 from fitAdmin.models import User, SportConf, SportDate, SportStat, SportDetail,Knowledge,KnowledgeType,Product,ProductPicture
 from fitApi.serializers import *
 
-
-@api_view(['GET', 'POST'])
-def user_list(request, format=None):
-    if request.method == 'GET':
-        snippets = User.objects.all()
-        serializer = UserSerializer(snippets, many=True)
-        return Response(serializer.data)
-
-    elif request.method == 'POST':
-        serializer = UserSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-@api_view(['GET', 'PUT', 'DELETE'])
-def user_detail(request, pk):
-    try:
-        user = User.objects.get(pk=pk)
-    except User.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
-
-    if request.method == 'GET':
-        serializer = UserSerializer(user)
-        return Response(serializer.data)
-
-    elif request.method == 'PUT':
-        serializer = UserSerializer(user, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    elif request.method == 'DELETE':
-        user.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
-
+#
+# @api_view(['GET', 'POST'])
+# def user_list(request, format=None):
+#     if request.method == 'GET':
+#         snippets = User.objects.all()
+#         serializer = UserSerializer(snippets, many=True)
+#         return Response(serializer.data)
+#
+#     elif request.method == 'POST':
+#         serializer = UserSerializer(data=request.data)
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response(serializer.data, status=status.HTTP_201_CREATED)
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+#
+#
+# @api_view(['GET', 'PUT', 'DELETE'])
+# def user_detail(request, pk):
+#     try:
+#         user = User.objects.get(pk=pk)
+#     except User.DoesNotExist:
+#         return Response(status=status.HTTP_404_NOT_FOUND)
+#
+#     if request.method == 'GET':
+#         serializer = UserSerializer(user)
+#         return Response(serializer.data)
+#
+#     elif request.method == 'PUT':
+#         serializer = UserSerializer(user, data=request.data)
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response(serializer.data)
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+#
+#     elif request.method == 'DELETE':
+#         user.delete()
+#         return Response(status=status.HTTP_204_NO_CONTENT)
+#
 
 @api_view(['POST'])
 def user_login(request):
@@ -106,7 +109,7 @@ def user_login(request):
                 else:
                     ip = request.META['REMOTE_ADDR']
 
-                user.last_login_time = datetime.now()
+                user.last_login_time = datetime.datetime.now()
                 user.last_login_ip = ip
                 user.last_login_type = login_type
                 user.login()
@@ -486,7 +489,7 @@ def sport_detail(request):
             end_str = request.GET['to']
         except KeyError:
             # 如果没有to参数，则默认到现在
-            end = datetime.now()
+            end = datetime.datetime.now()
             end_str = end.strftime("%Y-%m-%d")
 
         if not end:  # 有to参数，转为日期
@@ -585,7 +588,7 @@ def knowledge_list(request):
 
     if from_str == 0:
         # 没有from参数 一般是第一次获取 返回最近10天的知识
-        from_time = date.today()-timedelta(days=10)
+        from_time = date.today()- datetime.datetime.timedelta(days=-10)
     else:
         try:
             from_time = datetime.datetime.strptime(from_str, '%Y-%m-%d %H:%M:%S')
