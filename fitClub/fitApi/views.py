@@ -154,7 +154,10 @@ def user_profile(request):
 
             return Response(dict(status=1, message=serializer.errors))
         except Exception as exc:
-            return Response(dict(status=1, message=exc.detail))
+            if exc.message == "":
+                return Response(dict(status=1, detail=exc.detail))
+            else:
+                return Response(dict(status=1, message=exc.message))
 
 
 @api_view(['POST', 'GET'])
@@ -191,7 +194,10 @@ def user_avatar(request):
 
             return Response(dict(status=1, message=serializer.errors))
         except Exception as exc:
-            return Response(dict(status=1, message=exc.detail))
+            if exc.message == "":
+                return Response(dict(status=1, detail=exc.detail))
+            else:
+                return Response(dict(status=1, message=exc.message))
 
 
 @api_view(['GET', 'POST'])
@@ -229,7 +235,10 @@ def user_profile(request):
 
             return Response(dict(status=1, message=serializer.errors))
         except Exception as exc:
-            return Response(dict(status=1, message=exc.detail))
+            if exc.message == "":
+                return Response(dict(status=1, detail=exc.detail))
+            else:
+                return Response(dict(status=1, message=exc.message))
 
 
 @api_view(['POST', 'GET'])
@@ -278,7 +287,10 @@ def sport_conf(request):
 
             return Response(dict(status=1, message=serializer.errors))
         except Exception as exc:
-            return Response(dict(status=1, message=exc.detail))
+            if exc.message == "":
+                return Response(dict(status=1, detail=exc.detail))
+            else:
+                return Response(dict(status=1, message=exc.message))
 
 
 @api_view(['GET'])
@@ -320,7 +332,10 @@ def sport_stat(request):
         dateSerializer = SportDateSerializer(sportDate)
         return Response(dict(status=0, message='ok', data=dict(total=statSerializer.data, today=dateSerializer.data)))
     except Exception as exc:
-        return Response(dict(status=1, message=exc.detail))
+        if exc.message == "":
+            return Response(dict(status=1, detail=exc.detail))
+        else:
+            return Response(dict(status=1, message=exc.message))
 
 
 @api_view(['GET'])
@@ -363,23 +378,22 @@ def sport_date(request):
         except ValueError:
             return Response(dict(status=1, message='from参数转为日期格式失败'))
 
+    end_str = request.GET.get('to',r'现在')
+    if end_str == r'现在':
+        end = datetime.datetime.now()
+    else:
         try:
-            end_str = request.GET['to']
-        except KeyError:
-            # 如果没有to参数，则默认到今天
-            end = now().date()
-            end_str = now().strftime('%Y-%m-%d')
+            end = datetime.datetime.strptime(end_str, '%Y-%m-%d').date()
+        except ValueError:
+            return Response(dict(status=1, message='to参数转为日期格式失败'))
 
-        if not end:  # 有to参数，转为日期
-            try:
-                end = datetime.datetime.strptime(end_str, '%Y-%m-%d').date()
-            except ValueError:
-                return Response(dict(status=1, message='to参数转为日期格式失败'))
+    if start > end:
+        return Response(dict(status=1, message='开始时间: ' + str(start_str) + ' 大于 结束时间: ' + str(end_str) + ' ，请确保时间段正确'))
 
-        sportDates = user.sportdate_set.filter(sport_date__range=(start, end)).order_by('sport_date')
+    sportDates = user.sportdate_set.filter(sport_date__range=(start, end)).order_by('sport_date')
 
     if not sportDates:
-        return Response(dict(status=1, message='时间段 ' + str(start_str) + ' 至 ' + str(end_str) + ' 没有运动数据，请确保时间段正确'))
+        return Response(dict(status=1, message='时间段 [' + str(start_str) + '] 至 [' + str(end_str) + '] 没有运动数据'))
 
     result_data = []
     for sportDate in sportDates:
@@ -485,14 +499,10 @@ def sport_detail(request):
         except ValueError:
             return Response(dict(status=1, message='from参数转为日期格式失败'))
 
-        try:
-            end_str = request.GET['to']
-        except KeyError:
-            # 如果没有to参数，则默认到现在
+        end_str = request.GET.get('to',r'现在')
+        if end_str == r'现在':  # 有to参数，转为日期
             end = datetime.datetime.now()
-            end_str = end.strftime("%Y-%m-%d")
-
-        if not end:  # 有to参数，转为日期
+        else:
             try:
                 end = datetime.datetime.strptime(end_str + ' 23:59:59', '%Y-%m-%d %H:%M:%S')
             except ValueError:
@@ -505,7 +515,7 @@ def sport_detail(request):
         sport_details = user.sportdetail_set.filter(create_time__range=(start, end)).order_by('create_time')
 
     if not sport_details:
-        return Response(dict(status=1, message='时间段 ' + str(start_str) + ' 至 ' + str(end_str) + ' 没有运动数据，请确保时间段正确'))
+        return Response(dict(status=1, message='时间段 [' + str(start_str) + '] 至 [' + str(end_str) + '] 没有运动数据'))
 
     result_data = []
     for sport__detail in sport_details:
@@ -588,7 +598,7 @@ def knowledge_list(request):
 
     if from_str == 0:
         # 没有from参数 一般是第一次获取 返回最近10天的知识
-        from_time = date.today()- datetime.datetime.timedelta(days=-10)
+        from_time = date.today()- datetime.timedelta(days=+10)
     else:
         try:
             from_time = datetime.datetime.strptime(from_str, '%Y-%m-%d %H:%M:%S')
@@ -601,7 +611,6 @@ def knowledge_list(request):
     for knowledge_item in knowledgelist:
         #前100个字符
         knowledge_item.content = knowledge_item.content[0:100]
-        knowledge_item_serializer = KnowledgeSerializer(knowledge_item)
 
         #获取类型对象 可能多个嘛
         knowledge_item_types = knowledge_item.types.all()
@@ -609,13 +618,19 @@ def knowledge_list(request):
         for knowledge_item_type in knowledge_item_types:
             knowledge_type_data.append(KnowledgeTypeSerializer(knowledge_item_type).data)
 
-        result_data.append(dict(knowledge=knowledge_item_serializer.data, types=knowledge_type_data))
+        knowledge_item.type = knowledge_type_data
+        knowledge_item_serializer = KnowledgeSerializer(knowledge_item)
+
+        result_data.append(knowledge_item_serializer.data)
 
     return Response(dict(status=0, message='ok', data=result_data))
 
 
 '''
 健康宣教 获取列表 某个类型的知识
+page 页数
+pz 每页数量
+type 宣教类型
 '''
 # TODO 是否需要验证呢？
 
@@ -653,8 +668,12 @@ def knowledge_type_list(request):
     if type(page) != int:
         return Response(dict(status=1, message='page参数是必须的，必须是Int类型'))
 
-    index_begin = (page-1)*20
-    index_end = index_begin+20
+    pz = request.GET.get('pz',20)
+    pagesize = int(pz)
+    if type(pagesize) != int:
+      pagesize = 20
+    index_begin = (page-1)*pagesize
+    index_end = index_begin+pagesize
 
     knowledge_type = KnowledgeType.objects.get(id=l_type)
     if not knowledge_type:
@@ -666,6 +685,7 @@ def knowledge_type_list(request):
     for knowledge_item in knowledgelist:
         #前100个字符
         knowledge_item.content = knowledge_item.content[0:100]
+        # knowledge_item.type = [dict(id=l_type,name=knowledge_type.name)]
         knowledge_item_serializer = KnowledgeSerializer(knowledge_item)
 
         result_data.append(knowledge_item_serializer.data)
@@ -707,7 +727,6 @@ def knowledge_detail(request):
         knowledge_item = Knowledge.objects.get(pk=id)
 
         knowledge_item.read_count+=1
-        knowledge_serializer = KnowledgeSerializer(knowledge_item)
 
         #获取类型对象 可能多个嘛
         knowledge_types = knowledge_item.types.all()
@@ -715,8 +734,12 @@ def knowledge_detail(request):
         for knowledge_type in knowledge_types:
             knowledge_type_data.append(KnowledgeTypeSerializer(knowledge_type).data)
 
+        knowledge_item.type = knowledge_type_data
+
+        knowledge_serializer = KnowledgeSerializer(knowledge_item)
+
         knowledge_item.save()
-        return Response(dict(status=0, message='ok', data=(dict(knowledge=knowledge_serializer.data, types=knowledge_type_data))))
+        return Response(dict(status=0, message='ok', data=knowledge_serializer.data))
 
 
 '''
@@ -860,11 +883,13 @@ def product_detail(request):
 
 '''
     提交订单
-        [{product_id,order_price,number,total}]
+        [{id,number},]
 '''
-# TODO 待开发
-@api_view(['GET','POST'])
+@api_view(['POST'])
 def order_buy(request):
+    if request.method == 'GET':
+        return Response(status=status.HTTP_403_FORBIDDEN)
+
     try:
         token = request.GET['t']
     except KeyError:
@@ -882,40 +907,52 @@ def order_buy(request):
     except User.DoesNotExist:
         return Response(dict(status=1, message='token解析不出来'))
 
-    if request.method == 'GET':
-        try:
-            order = user.order_set.get(pk=1)
+    try:
+        data = request.DATA
+        if data:
+            # 计算并存入
+            total = 0
+            save_list = []
+            for order_tmp in data:
+                id_tmp = order_tmp.get("id")
+                number_tmp = order_tmp.get("number")
 
-            order_details = order.orderdetail_set.all()
+                order_product = Product.objects.get(pk=id_tmp)
 
-            result_data = []
-            for order_detail in order_details:
-                order_detail_serializer = OrderBuySerializer(order_detail)
-                result_data.append(order_detail_serializer.data)
+                if order_product.is_delete:
+                    return Response(dict(status=0,message='商品 [id='+str(id_tmp)+'] 已下架，请重新选购.'))
 
-            return Response(result_data)
-        except Order.DoesNotExist:
-            return Response(dict(status=1, message='订单不存在'))
-        except SportConf.DoesNotExist:
-            return Response(dict(status=1, message='未设置目标'))
+                order_price = order_product.price * order_product.discount
+                total_tmp = order_price * float(number_tmp)
 
-    elif request.method == 'POST':
-        try:
-            sportConf = user.sportconf
-        except SportConf.DoesNotExist:
-            user.sportconf = SportConf()
-            sportConf = user.sportconf
+                total +=  total_tmp
 
-        try:
-            serializer = SportConfSerializer(sportConf, data=request.data)
-            if serializer.is_valid():
-                serializer.save()
-                return Response(dict(status=0, message='ok', data=serializer.data))
+                order_item = OrderDetail(order_price=order_price,product_price=order_product.price,number=number_tmp,\
+                                         total=total_tmp)
+                order_item.product = order_product
 
-            return Response(dict(status=1, message=serializer.errors))
-        except Exception as exc:
-            return Response(dict(status=1, message=exc.detail))
+                save_list.append(order_item)
 
+            lastOrder = user.order_set.order_by("-order_code").first()
+            new_code = user.id * 1000000
+            if lastOrder:
+                new_code = lastOrder.order_code + 1
+            create_order = user.order_set.create(order_code=new_code,total_pay=total,status=1)
+
+            for order_save in save_list:
+                order_save.order = create_order
+                order_save.save()
+
+            return Response(dict(status=0,message='ok',data='恭喜，下单成功'))
+        else:
+            return Response(dict(status=1, message='什么也没接收到，请重试.'))
+    except Product.DoesNotExist:
+        return Response(dict(status=0,message='商品 [id='+str(id_tmp)+'] 不存在，请重试.'))
+    except Exception as exc:
+        if exc.message == "":
+            return Response(dict(status=1, detail=exc.detail))
+        else:
+            return Response(dict(status=1, message=exc.message))
 
 '''
 查询订单列表

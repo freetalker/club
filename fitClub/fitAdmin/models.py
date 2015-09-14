@@ -292,7 +292,7 @@ class ProductPicture(models.Model):
 
 #订单
 class Order(models.Model):
-    order_code = models.CharField(max_length=10)
+    order_code = models.IntegerField(max_length=20)
     total_pay = models.FloatField(max_length=9)
     status = models.IntegerField(choices=order_status_choices)
     user = models.ForeignKey(User,db_column ="create_by")

@@ -61,9 +61,11 @@ class SportDetailSerializer(serializers.ModelSerializer):
 
 class KnowledgeSerializer(serializers.ModelSerializer):
     cover = serializers.ImageField(source='cover_path')
+    # 可以不填
+    type = serializers.ListField(required=False)
     class Meta:
         model = Knowledge
-        fields = ('id','create_time','title','cover','content','author')
+        fields = ('id','create_time','title','cover','content','author','type')
 
 class KnowledgeTypeSerializer(serializers.ModelSerializer):
 
@@ -90,12 +92,5 @@ class ProductPictureSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = ('picture',)
-
-class OrderBuySerializer(serializers.ModelSerializer):
-    product_id = serializers.IntegerField()
-
-    class Meta:
-        model = OrderDetail
-        fields = ('order_price','product_id','number','total',)
 
 
