@@ -5,8 +5,10 @@
       <driver-ref>sqlite.xerial</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
-      <jdbc-url>jdbc:sqlite:$PROJECT_DIR$/fitClub.sqlite3</jdbc-url>
-      <libraries />
+      <jdbc-url>jdbc:mysql://rds8xa13hxas7z07b51t.mysql.rds.aliyuncs.com:3306/rc913c8pm2k6p5w5</jdbc-url>
+      <explain-plan-config>
+        <provider>com.intellij.database.plan.sqlite.SqliteExplainPlanProvider</provider>
+      </explain-plan-config>
     </data-source>
   </component>
 </project>

@@ -27,7 +27,7 @@ urlpatterns = [
     url(r'^', include('fitAdmin.urls')),
     url(r'^misfit$',misfit),
     url(r'^misfit/auth',misfit_authrize),
-    url(r'^misfit/notification',misfit_notification),
+    # url(r'^misfit/notification',misfit_notification),
     url(r'^django-admin/', include(admin.site.urls)),
     url(r'^hello/$', hello),
     url(r'^login/$', login),

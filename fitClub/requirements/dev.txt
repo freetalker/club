@@ -1,2 +1,6 @@
-# requirements/dev.txt
--r common.txt
+Django==1.9
+djangorestframework==3.3.2
+MySQL-python==1.2.5
+pyDes==2.0.1
+Pillow==2.9.0
+simplejson==3.8.0

@@ -32,7 +32,8 @@ DEBUG = True
 # )
 
 ALLOWED_HOSTS = [
-    '101.200.73.94',
+    'www.lyjohn.com'
+    '114.215.100.115',
     '127.0.0.1',
     'localhost',
 ]
@@ -105,17 +106,12 @@ WSGI_APPLICATION = 'fitClub.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'fitClub.sqlite3'),
-    },
-    'test': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'fitclub',
-        'USER': 'fitclub',
-        'PASSWORD': 'abcd-1234',
-        'HOST': '101.200.73.94',
-        'PORT': '3306',
-        'TIME_ZONE': 'Asia/Shanghai'
+        'NAME': 'rc913c8pm2k6p5w5',
+        'USER': 'rc913c8pm2k6p5w5',
+        'PASSWORD': 'abcd1234',
+        'HOST': 'rds8xa13hxas7z07b51t.mysql.rds.aliyuncs.com',
+        'PORT': '3306'
     }
 }
 
