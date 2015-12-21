@@ -19,10 +19,6 @@ import simplejson as simplejson
 from fitAdmin.models import *
 from base.misfitanth import *
 
-misfit_app_key = 'QaQCAfBPfDvQGQ6w'
-misfit_app_secret = '4K5tcnsUnZiCidTGzJK1DQCJZdyriaDm'
-misfit_redirect_uri='http://127.0.0.1:8000/misfit/auth'
-
 
 class LoginForm(forms.Form):
     loginname = forms.CharField(max_length=100)

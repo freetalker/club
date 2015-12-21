@@ -5,7 +5,7 @@ from misfit.auth import MisfitAuth
 
 misfit_app_key = 'QaQCAfBPfDvQGQ6w'
 misfit_app_secret = '4K5tcnsUnZiCidTGzJK1DQCJZdyriaDm'
-misfit_redirect_uri='http://127.0.0.1:8000/misfit/auth'
+misfit_redirect_uri='http://www.msbn.help/misfit/auth'
 
 def singleton(cls, *args, **kw):
     instances = {}
